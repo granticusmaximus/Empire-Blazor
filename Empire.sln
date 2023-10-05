@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Empire", "Empire\Empire.csproj", "{DEAC0794-5FC7-4CDC-97F5-DCBA9DAA367D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DEAC0794-5FC7-4CDC-97F5-DCBA9DAA367D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEAC0794-5FC7-4CDC-97F5-DCBA9DAA367D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEAC0794-5FC7-4CDC-97F5-DCBA9DAA367D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEAC0794-5FC7-4CDC-97F5-DCBA9DAA367D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19C6473B-B0D7-4057-9862-2C33104F82A9}
+	EndGlobalSection
+EndGlobal
