@@ -132,8 +132,11 @@ namespace Empire.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var analyst = await _context.Analyst.FindAsync(id);
-            _context.Analyst.Remove(analyst);
-            await _context.SaveChangesAsync();
+            if (analyst != null)
+            {
+                _context.Analyst.Remove(analyst);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
 
