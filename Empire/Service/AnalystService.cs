@@ -15,9 +15,13 @@ namespace Empire.Service
         {
             _dbContext = dbContext;
         }
-        public Task<Analyst[]> GetListOfAnalyst()
+
+        public Analyst GetListOfAnalyst(int id)
         {
-            await _context.Analyst.ToListAsync()
+            var analyst = _dbContext
+               .Analyst
+               .ToListAsync();
+                return new Analyst();
         }
 
         public void Delete(int id)
