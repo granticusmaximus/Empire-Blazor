@@ -21,5 +21,7 @@ namespace Empire.Models
             get { return FirstName + " " + LastName; }
         }
         public Guid UserGuid { get; set; }
+        public string Address { get; set; }
+        public string Cellnumber { get; set; }
     }
 }

@@ -16,15 +16,32 @@ namespace Empire.Service
             _dbContext = dbContext;
         }
 
-        public Analyst GetListOfAnalyst(int id)
+        public List<Analyst> GetAnalystAsList()
         {
-            var analyst = _dbContext
-               .Analyst
-               .ToListAsync();
-                return new Analyst();
+            try
+            {
+                return _dbContext.Analyst.ToList();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public void Delete(int id)
+        public void AddAnalyst(Analyst analyst)
+        {
+            try
+            {
+                _dbContext.Analyst.Add(analyst);
+                _dbContext.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void DeleteAnalyst(int id)
         {
             var analyst = _dbContext.Analyst.SingleOrDefault(x => x.BAID == id);
             _dbContext.Remove(analyst);
