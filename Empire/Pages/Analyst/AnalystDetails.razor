@@ -1,5 +1,101 @@
-﻿<h3>AnalystDetails</h3>
+﻿@page "/fetchanalystdetails"
+@using Empire.Models
+@inject HttpClient Http
 
+<h1>Analyst Details</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href='/analyst/add' class="btn btn-primary" role="button">
+            <i class="fas fa-user-plus"></i>
+            Add Analyst
+        </a>
+    </div>
+    <div class="input-group col">
+        <input type="text" class="form-control" placeholder="Search analyst by name"
+        @bind="SearchString" @bind:event="oninput" @onkeyup="FilterAnalyst" />
+        @if (SearchString.Length > 0)
+        {
+            <div class="input-group-append">
+                <button class="btn btn-danger" @onclick="ResetSearch">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<br />
+@if (analystList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Cell No</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var analyst in analystList)
+            {
+                <tr>
+                    <td>@analyst.BAID</td>
+                    <td>@analyst.BAFName</td>
+                    <td>@analyst.Email</td>
+                    <td>@analyst.Phone</td>
+                    <td>
+                        <a href='/analyst/edit/@analyst.BAID' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='/analyst/delete/@analyst.BAID' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
 @code {
-
+    protected List<Analyst> analystList = new();
+    protected List<Analyst> searchAnalystData = new();
+    protected Analyst analyst = new();
+    protected string SearchString { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAnalyst();
+    }
+    protected async Task GetAnalyst()
+    {
+        analystList = await Http.GetFromJsonAsync<List<Analyst>>("api/Analyst");
+        searchAnalystData = analystList;
+    }
+    protected void FilterAnalyst()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            analystList = searchAnalystData
+                .Where(x => x.BAFName.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            analystList = searchAnalystData;
+        }
+    }
+    protected void DeleteConfirm(int ID)
+    {
+        analyst = analystList.FirstOrDefault(x => x.BAID == ID);
+    }
+    public void ResetSearch()
+    {
+        SearchString = string.Empty;
+        analystList = searchAnalystData;
+    }
 }
