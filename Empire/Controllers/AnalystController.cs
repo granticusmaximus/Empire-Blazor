@@ -1,148 +1,59 @@
 ﻿using Empire.Data;
 using Empire.Models;
+using Empire.Service;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Empire.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class AnalystController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AnalystService _service;
 
-        public AnalystController(ApplicationDbContext context)
+        public AnalystController(ApplicationDbContext context, AnalystService service)
         {
             _context = context;
+            _service = service;
         }
 
-        // GET: Analyst
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<List<Analyst>> Get()
         {
-            return View(await _context.Analyst.ToListAsync());
+            return await Task.FromResult(_service.GetAnalystAsList());
         }
 
-        // GET: Analyst/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var analyst = await _context.Analyst
-                .FirstOrDefaultAsync(m => m.BAID == id);
-            if (analyst == null)
-            {
-                return NotFound();
-            }
-
-            return View(analyst);
-        }
-
-        // GET: Analyst/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Analyst/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BAID,BAFName,BALName,Email,Phone")] Analyst analyst)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(analyst);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(analyst);
-        }
-
-        // GET: Analyst/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var analyst = await _context.Analyst.FindAsync(id);
-            if (analyst == null)
-            {
-                return NotFound();
-            }
-            return View(analyst);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BAID,BAFName,BALName,Email,Phone")] Analyst analyst)
-        {
-            if (id != analyst.BAID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(analyst);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AnalystExists(analyst.BAID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(analyst);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var analyst = await _context.Analyst
-                .FirstOrDefaultAsync(m => m.BAID == id);
-            if (analyst == null)
-            {
-                return NotFound();
-            }
-
-            return View(analyst);
-        }
-
-        // POST: Analyst/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var analyst = await _context.Analyst.FindAsync(id);
+            Analyst analyst = _service.GetAnalystData(id);
             if (analyst != null)
             {
-                _context.Analyst.Remove(analyst);
-                await _context.SaveChangesAsync();
+                return Ok(analyst);
             }
-            return RedirectToAction(nameof(Index));
+            return NotFound();
         }
 
-        private bool AnalystExists(int id)
+        [HttpPost]
+        public void Post(Analyst analyst)
         {
-            return _context.Analyst.Any(e => e.BAID == id);
+            _service.AddAnalyst(analyst);
+        }
+
+        [HttpPut]
+        public void Put(Analyst analyst)
+        {
+            _service.UpdateAnalystDetails(analyst);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _service.DeleteAnalyst(id);
+            return Ok();
         }
     }
 }

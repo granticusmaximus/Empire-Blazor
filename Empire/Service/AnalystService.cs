@@ -74,7 +74,7 @@ namespace Empire.Service
             }
         }
 
-        public void DeleteUser(int id)
+        public void DeleteAnalyst(int id)
         {
             try
             {
