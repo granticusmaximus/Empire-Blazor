@@ -41,11 +41,58 @@ namespace Empire.Service
             }
         }
 
-        public void DeleteAnalyst(int id)
+        public void UpdateAnalystDetails(Analyst analyst)
         {
-            var analyst = _dbContext.Analyst.SingleOrDefault(x => x.BAID == id);
-            _dbContext.Remove(analyst);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Entry(analyst).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public Analyst GetAnalystData(int id)
+        {
+            try
+            {
+                Analyst? analyst = _dbContext.Analyst.Find(id);
+                if (analyst != null)
+                {
+                    return analyst;
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void DeleteUser(int id)
+        {
+            try
+            {
+                Analyst? analyst = _dbContext.Analyst.Find(id);
+                if (analyst != null)
+                {
+                    _dbContext.Analyst.Remove(analyst);
+                    _dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new ArgumentNullException();
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }
