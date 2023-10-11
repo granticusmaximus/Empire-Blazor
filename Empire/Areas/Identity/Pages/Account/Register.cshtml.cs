@@ -77,12 +77,27 @@ namespace Empire.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Cell Number")]
             public string CellNumber { get; set; }
+
+            [Display(Name = "Profile Picture")]
+            public IFormFile UploadedProfilePicture { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+
+        private async Task<byte[]> ConvertToByteArray(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -98,7 +113,8 @@ namespace Empire.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
-                    Cellnumber = Input.CellNumber
+                    Cellnumber = Input.CellNumber,
+                    ProfilePicture = await ConvertToByteArray(Input.UploadedProfilePicture)
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
