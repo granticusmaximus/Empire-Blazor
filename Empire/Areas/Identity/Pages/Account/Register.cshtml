@@ -27,9 +27,10 @@
                 </div>
                 <br />
 
-                <div class="form-group">
-                    <label asp-for="Input.UploadedProfilePicture"></label>
-                    <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control" />
+                <div class="form-group drop-zone" id="dragDropArea">
+                    <label asp-for="Input.UploadedProfilePicture">Drag & Drop your Profile Picture here or click to upload</label>
+                    <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control" style="display: none;" />
+                    <div id="fileDragName" style="padding: 10px;"></div>
                     <span asp-validation-for="Input.UploadedProfilePicture" class="text-danger"></span>
                 </div>
                 <br />
@@ -71,4 +72,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/registerDnD.js"></script>
 }

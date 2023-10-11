@@ -62,3 +62,7 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.dragover-border {
+    border: 3px dashed #f00 !important;
+}
