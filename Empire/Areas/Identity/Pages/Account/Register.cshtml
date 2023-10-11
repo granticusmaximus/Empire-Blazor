@@ -4,6 +4,22 @@
     ViewData["Title"] = "Register a new account";
 }
 
+<style>
+    .dropZone {
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        padding: 50px;
+        text-align: center;
+        font: 21pt bold arial;
+        color: #bbb;
+    }
+
+    .dropZone:hover {
+            cursor: pointer;
+    }
+</style>
+
 <h1>@ViewData["Title"]</h1>
 
 <center>
@@ -27,7 +43,7 @@
                 </div>
                 <br />
 
-                <div class="form-group drop-zone" id="dragDropArea">
+                <div class="form-group dropZone" id="dragDropArea">
                     <label asp-for="Input.UploadedProfilePicture">Drag & Drop your Profile Picture here or click to upload</label>
                     <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control" style="display: none;" />
                     <div id="fileDragName" style="padding: 10px;"></div>

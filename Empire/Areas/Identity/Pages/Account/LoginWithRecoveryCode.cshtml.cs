@@ -21,7 +21,7 @@ namespace Empire.Areas.Identity.Pages.Account
 
         public LoginWithRecoveryCodeModel(
             SignInManager<ApplicationUser> signInManager,
-            UserManager<IdentApplicationUserityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             ILogger<LoginWithRecoveryCodeModel> logger)
         {
             _signInManager = signInManager;
