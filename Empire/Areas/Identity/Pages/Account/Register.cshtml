@@ -9,7 +9,7 @@
 <center>
     <div class="row">
         <div class="col-md-12">
-            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
