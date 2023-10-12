@@ -1,6 +1,6 @@
 ﻿@page "/fetchanalystdetails"
 @using Empire.Models
-@inject HttpClient Http
+@inject IHttpClientFactory HttpClientFactory
 
 <h1>Analyst Details</h1>
 
@@ -67,13 +67,15 @@ else
     protected List<Analyst> searchAnalystData = new();
     protected Analyst analyst = new();
     protected string SearchString { get; set; } = string.Empty;
+    private HttpClient _client;
     protected override async Task OnInitializedAsync()
     {
+        _client = HttpClientFactory.CreateClient();
         await GetAnalyst();
     }
     protected async Task GetAnalyst()
     {
-        analystList = await Http.GetFromJsonAsync<List<Analyst>>("api/Analyst");
+        analystList = await _client.GetFromJsonAsync<List<Analyst>>("api/Analyst");
         searchAnalystData = analystList;
     }
     protected void FilterAnalyst()

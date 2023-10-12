@@ -21,6 +21,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -35,6 +36,12 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
+builder.Services.AddHttpClient("LocalApiClient", client =>
+{
+    client.BaseAddress = new Uri(apiBaseAddress);
+});
 
 app.UseHttpsRedirection();
 
