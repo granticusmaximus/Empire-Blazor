@@ -1,7 +1,20 @@
-﻿<AuthorizeView>
-    <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
-        <form method="post" action="Identity/Account/LogOut">
+﻿@using Microsoft.AspNetCore.Identity;
+@using Empire.Models;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+
+<AuthorizeView>
+    <Authorized Context="authState">
+        @if (CurrentUser != null)
+        {
+            <img src="data:image/jpeg;base64,@Convert.ToBase64String(CurrentUser.ProfilePicture)" width="30" height="30" alt="Profile Picture" class="rounded-circle mr-2" />
+            <a href="Identity/Account/Manage">Hello, @CurrentUser.FirstName!</a>
+        }
+        else
+        {
+            <span>Loading...</span>
+        }
+        <form method="post" action="Identity/Account/LogOut" class="d-inline">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
     </Authorized>
@@ -10,3 +23,25 @@
         <a href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    private ApplicationUser CurrentUser { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Call LoadCurrentUser here, passing the authState's User property.
+        await LoadCurrentUser();
+    }
+
+    private async Task LoadCurrentUser()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            CurrentUser = await UserManager.FindByNameAsync(user.Identity.Name);
+        }
+    }
+
+
+}
