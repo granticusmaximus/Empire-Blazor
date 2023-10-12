@@ -5,26 +5,93 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+<style>
+    .dropZone {
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        padding: 50px;
+        text-align: center;
+        font: 21pt bold arial;
+        color: #bbb;
+    }
+
+        .dropZone:hover {
+            cursor: pointer;
+        }
+</style>
+
+<h1>@ViewData["Title"]</h1>
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Username" class="form-control" disabled />
-                <label asp-for="Username" class="form-label"></label>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+<center>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+            <form id="profile-form" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="profile-picture-container">
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Input.ProfilePicture)" alt="Profile Picture" class="rounded-circle" width="100" height="100" />
+                    <hr />
+                    <div class="dropZone">
+                        Drop or <button type="button">Browse for a new profile picture</button>
+                        <input type="file" hidden accept="image/*" />
+                    </div>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Username" class="form-control" disabled />
+                    <label asp-for="Username" class="form-label"></label>
+                </div>
+
+                <div class="form-floating">
+                    <input asp-for="Input.FirstName" class="form-control" />
+                    <label asp-for="Input.FirstName" class="form-label"></label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating">
+                    <input asp-for="Input.LastName" class="form-control" />
+                    <label asp-for="Input.LastName" class="form-label"></label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating">
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            </form>
+        </div>
     </div>
-</div>
+</center>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Drag and Drop Logic for Profile Picture (Similar to Register Page)
+        // This is a simple example and may need additional functionality or libraries for full support.
+        let dropArea = document.querySelector('.drag-drop-area');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+
+            if (files.length) {
+                // Handle the file upload (e.g., preview the image, save it, etc.)
+            }
+        }
+    </script>
 }

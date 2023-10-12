@@ -3,26 +3,52 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+
+
+@{
+    ApplicationUser CurrentUser = null;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        CurrentUser = UserManager.FindByIdAsync(userId).Result;
+    }
+}
+
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (CurrentUser != null)
+        {
+            <li class="nav-item">
+                <img src="data:image/jpeg;base64,@Convert.ToBase64String(CurrentUser.ProfilePicture)" width="30" height="30" alt="Profile Picture" class="rounded-circle mr-2" />
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@CurrentUser.FirstName <span class="oi oi-cog" aria-hidden="true"></span> </a>
+            </li>
+            <br/>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
+                    <button type="submit" class="nav-link btn btn-danger" style="color: white">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <span>Loading...</span>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="nav-item">0
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
 </ul>
