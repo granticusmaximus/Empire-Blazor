@@ -1,0 +1,89 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register a new account";
+}
+
+<style>
+    .dropZone {
+        border: 2px dashed #bbb;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        padding: 50px;
+        text-align: center;
+        font: 21pt bold arial;
+        color: #bbb;
+        cursor: pointer;
+    }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+
+<center>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-floating">
+                    <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true" />
+                    <label asp-for="Input.FirstName">First Name</label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-floating">
+                    <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true" />
+                    <label asp-for="Input.LastName">Last Name</label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group dropZone" id="dragDropArea">
+                    <label asp-for="Input.UploadedProfilePicture">Drag & Drop your Profile Picture here or click to upload</label>
+                    <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control" style="display: none;" />
+                    <div id="fileDragName" style="padding: 10px;"></div>
+                    <span asp-validation-for="Input.UploadedProfilePicture" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-floating">
+                    <input asp-for="Input.CellNumber" class="form-control" autocomplete="tel" aria-required="true" />
+                    <label asp-for="Input.CellNumber">Cell Number</label>
+                    <span asp-validation-for="Input.CellNumber" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-floating">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-floating">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="Input.Password">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-floating">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <hr />
+                <center>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register Account</button>
+                </center>
+            </form>
+        </div>
+    </div>
+</center>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/registerDnD.js"></script>
+}
