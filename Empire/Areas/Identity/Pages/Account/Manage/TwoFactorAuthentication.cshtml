@@ -6,6 +6,30 @@
     ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
 }
 
+<style>
+    .nav-link {
+        color: white;
+    }
+
+    .nav-pills .nav-link {
+        background: gray;
+        border-radius: 0;
+    }
+
+    .nav-link:hover {
+        color: #fff !important;
+        background-color: #0b5ed7 !important;
+        border-color: #0a58ca !important;
+        border-radius: 0;
+    }
+
+    .nav-pills .nav-link:active {
+        color: #fff !important;
+        background-color: #0b5ed7 !important;
+        border-color: #0a58ca !important;
+    }
+</style>
+
 <partial name="_StatusMessage" for="StatusMessage" />
 <h3>@ViewData["Title"]</h3>
 @{

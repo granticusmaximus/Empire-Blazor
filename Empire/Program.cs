@@ -22,6 +22,12 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddHttpClient();
 
+var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
+
+builder.Services.AddHttpClient("LocalApiClient", client =>
+{
+    client.BaseAddress = new Uri(apiBaseAddress);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,21 +42,11 @@ else
     app.UseHsts();
 }
 
-var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
-builder.Services.AddHttpClient("LocalApiClient", client =>
-{
-    client.BaseAddress = new Uri(apiBaseAddress);
-});
-
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
