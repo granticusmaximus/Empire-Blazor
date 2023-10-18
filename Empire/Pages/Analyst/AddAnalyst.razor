@@ -1,7 +1,7 @@
 ﻿@page "/analyst/add"
 @page "/analyst/edit/{BAID:int}"
 @using Empire.Models
-@inject HttpClient Http
+@inject HttpClient LocalApiClient
 @inject NavigationManager NavigationManager
 <h1>@Title User</h1>
 <hr />
@@ -50,18 +50,18 @@
         if (baID != 0)
         {
             Title = "Edit";
-            analyst = await Http.GetFromJsonAsync<Analyst>("api/Analyst/" + baID);
+            analyst = await LocalApiClient.GetFromJsonAsync<Analyst>("api/Analyst/" + baID);
         }
     }
     protected async Task SaveAnalyst()
     {
         if (analyst.BAID != 0)
         {
-            await Http.PutAsJsonAsync("api/Analyst", analyst);
+            await LocalApiClient.PutAsJsonAsync("api/Analyst", analyst);
         }
         else
         {
-            await Http.PostAsJsonAsync("api/Analyst", analyst);
+            await LocalApiClient.PostAsJsonAsync("api/Analyst", analyst);
         }
         Cancel();
     }

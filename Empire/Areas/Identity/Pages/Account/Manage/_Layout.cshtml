@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Empire.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using System.Security.Claims
+
+@{
     if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
     {
         Layout = parentLayout.ToString();
@@ -7,12 +13,20 @@
     {
         Layout = "/Areas/Identity/Pages/_Layout.cshtml";
     }
+
+    ApplicationUser CurrentUser = null;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        CurrentUser = UserManager.FindByIdAsync(userId).Result;
+    }
 }
 
-<h1>Manage your account</h1>
+<h1>Manage account for @CurrentUser.FullName</h1>
+
 
 <div>
-    <h2>Change your account settings</h2>
     <hr />
     <div class="row">
         <div class="col-md-3">

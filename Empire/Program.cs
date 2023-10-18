@@ -28,6 +28,18 @@ builder.Services.AddHttpClient("LocalApiClient", client =>
 {
     client.BaseAddress = new Uri(apiBaseAddress);
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins(apiBaseAddress)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

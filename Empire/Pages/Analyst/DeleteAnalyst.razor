@@ -1,6 +1,6 @@
 ﻿@page "/analyst/delete/{BAID:int}"
 @using Empire.Models
-@inject HttpClient Http
+@inject HttpClient LocalApiClient
 @inject NavigationManager NavigationManager
 <h2>Delete Analyst</h2>
 <br />
@@ -33,11 +33,11 @@
     Analyst analyst = new Analyst();
     protected override async Task OnInitializedAsync()
     {
-        analyst = await Http.GetFromJsonAsync<Analyst>("/api/Analyst/" + Convert.ToInt32(baId));
+        analyst = await LocalApiClient.GetFromJsonAsync<Analyst>("/api/Analyst/" + Convert.ToInt32(baId));
     }
     protected async Task RemoveUser(int baID)
     {
-        await Http.DeleteAsync("api/User/" + baID);
+        await LocalApiClient.DeleteAsync("api/User/" + baID);
         NavigationManager.NavigateTo("/fetchanalystdetails");
     }
     void Cancel()

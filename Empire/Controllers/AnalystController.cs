@@ -1,7 +1,6 @@
 ﻿using Empire.Data;
 using Empire.Models;
 using Empire.Service;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
