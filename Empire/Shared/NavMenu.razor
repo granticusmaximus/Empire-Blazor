@@ -1,4 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Empire.Models
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -16,7 +21,7 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        @if (IsUserLoggedIn)
+        @if (CurrentUser != null)
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="fetchanalystdetails">
@@ -28,11 +33,8 @@
 </div>
 
 @code {
-    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; }
-
     private bool collapseNavMenu = true;
-    private bool IsUserLoggedIn { get; set; }
-
+    private ApplicationUser CurrentUser { get; set; }
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
@@ -42,7 +44,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        IsUserLoggedIn = authState.User.Identity.IsAuthenticated;
+        // Call LoadCurrentUser here, passing the authState's User property.
+        await LoadCurrentUser();
+    }
+
+    private async Task LoadCurrentUser()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            CurrentUser = await UserManager.FindByNameAsync(user.Identity.Name);
+        }
     }
 }
