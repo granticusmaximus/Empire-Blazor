@@ -3,12 +3,15 @@
 @using Empire.Service
 @inject EmployeeService employeeService
 
-<NavLink class="nav-link" href="AddEmployee">
+<NavLink class="btn btn-success" href="AddEmployee">
     <span class="oi oi-plus" aria-hidden="true">Add New</span>
 
 </NavLink>
 
 <h1>Employee Info</h1>
+
+<input type="text" placeholder="Search..." @bind-value="searchTerm" @bind-value:event="oninput" class="form-control" />
+
 @if (EmpObj is null)
 {
     <p><em>Loading... !</em></p>
@@ -18,8 +21,8 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Emp Id</th>
-                <th>Employee Name</th>
+                <th>Id</th>
+                <th>Name</th>
                 <th>Gender</th>
                 <th>Designation</th>
                 <th>City</th>
@@ -40,10 +43,10 @@ else
                     <td>@emp.Email</td>
                     <td>@emp.Phone</td>
                     <td>
-                        <a class="nav-link" href="EditEmployee/@emp.EmpID">
+                        <a class="btn btn-warning" href="EditEmployee/@emp.EmpID">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
                         </a>
-                        <a class="nav-link" href="Delete/@emp.EmpID">
+                        <a class="btn btn-danger" href="Delete/@emp.EmpID">
                             <span class="oi oi-trash" aria-hidden="true">Delete</span>
                         </a>
                     </td>
@@ -56,8 +59,27 @@ else
 
 @code {
     List<Employee> EmpObj;
+    List<Employee> DisplayedEmpObj;  // This will hold the filtered results
+    string searchTerm = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         EmpObj = await Task.Run(() => employeeService.GetAllEmployeesAsync());
+        DisplayedEmpObj = EmpObj;  // By default, display all employees
+    }
+    void FilterEmployees()
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            DisplayedEmpObj = EmpObj; // If search term is empty, show all employees
+        }
+        else
+        {
+            DisplayedEmpObj = EmpObj
+                .Where(e => e.Fullname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                            || e.Designation.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                           // ... You can add more fields to search on ...
+                           ).ToList();
+        }
     }
 }
