@@ -22,6 +22,9 @@ namespace Empire.Models
         {
             get { return FName + " " + LName; }
         }
+        public string Gender { get; set; }
+        public string City { get; set; }
+        public string Designation { get; set; }
     }
 
 }
