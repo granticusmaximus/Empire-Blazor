@@ -3,14 +3,27 @@
 @using Empire.Service
 @inject EmployeeService employeeService
 
-<NavLink class="btn btn-success" href="AddEmployee">
-    <span class="oi oi-plus" aria-hidden="true">Add New</span>
+<center>
+    <h1>Employee Info</h1>
+    <hr />
+</center>
 
-</NavLink>
+<div class="row">
+    <!-- Button on the left -->
+    <div class="col-md-6">
+        <NavLink class="btn btn-success" href="AddEmployee">
+            <span class="oi oi-plus" aria-hidden="true">Add New Employee</span>
+        </NavLink>
+    </div>
 
-<h1>Employee Info</h1>
+    <!-- Search Bar on the right -->
+    <div class="col-md-6">
+        <input type="text" placeholder="Search for employee" @bind-value="searchTerm" @bind-value:event="oninput" class="form-control float-right" style="width: 85%;" />
+    </div>
+</div>
 
-<input type="text" placeholder="Search..." @bind-value="searchTerm" @bind-value:event="oninput" class="form-control" />
+<hr />
+
 
 @if (EmpObj is null)
 {
@@ -59,26 +72,25 @@ else
 
 @code {
     List<Employee> EmpObj;
-    List<Employee> DisplayedEmpObj;  // This will hold the filtered results
+    List<Employee> DisplayedEmpObj;
     string searchTerm = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         EmpObj = await Task.Run(() => employeeService.GetAllEmployeesAsync());
-        DisplayedEmpObj = EmpObj;  // By default, display all employees
+        DisplayedEmpObj = EmpObj;
     }
     void FilterEmployees()
     {
         if (string.IsNullOrEmpty(searchTerm))
         {
-            DisplayedEmpObj = EmpObj; // If search term is empty, show all employees
+            DisplayedEmpObj = EmpObj;
         }
         else
         {
             DisplayedEmpObj = EmpObj
                 .Where(e => e.Fullname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
                             || e.Designation.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
-                           // ... You can add more fields to search on ...
                            ).ToList();
         }
     }
