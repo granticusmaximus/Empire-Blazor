@@ -15,12 +15,10 @@ namespace Empire.Models
         [ForeignKey("Analyst")]
         [DisplayName("BA Assigned:")]
         public int AssignedBA { get; set; }
-        public Analyst Analyst { get; set; }
 
         [ForeignKey("Developer")]
         [DisplayName("Dev Assigned:")]
         public int AssignedDev { get; set; }
-        public Developer Developer { get; set; }
 
         [DisplayName("Purpose:")]
         public string AppNotes { get; set; }

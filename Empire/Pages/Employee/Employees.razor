@@ -9,14 +9,11 @@
 </center>
 
 <div class="row">
-    <!-- Button on the left -->
     <div class="col-md-6">
         <NavLink class="btn btn-success" href="AddEmployee">
             <span class="oi oi-plus" aria-hidden="true">Add New Employee</span>
         </NavLink>
     </div>
-
-    <!-- Search Bar on the right -->
     <div class="col-md-6">
         <input type="text" placeholder="Search for employee" @bind-value="searchTerm" @bind-value:event="oninput" class="form-control float-right" style="width: 85%;" />
     </div>
