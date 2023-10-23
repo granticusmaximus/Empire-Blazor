@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Empire.Data.Migrations
+namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231004205328_EmployeeEntityCreation")]
-    partial class EmployeeEntityCreation
+    [Migration("20231023230508_NewStartEFModels")]
+    partial class NewStartEFModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,35 +24,6 @@ namespace Empire.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Empire.Models.Analyst", b =>
-                {
-                    b.Property<int>("BAID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BAID"), 1L, 1);
-
-                    b.Property<string>("BAFName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BALName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BAID");
-
-                    b.ToTable("Analyst");
-                });
-
             modelBuilder.Entity("Empire.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -60,6 +31,13 @@ namespace Empire.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cellnumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -103,14 +81,15 @@ namespace Empire.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<byte[]>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<Guid>("UserGuid")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -165,40 +144,7 @@ namespace Empire.Data.Migrations
 
                     b.HasKey("AppID");
 
-                    b.HasIndex("AssignedBA");
-
-                    b.HasIndex("AssignedDev");
-
                     b.ToTable("Apps");
-                });
-
-            modelBuilder.Entity("Empire.Models.Developer", b =>
-                {
-                    b.Property<int>("DevID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DevID"), 1L, 1);
-
-                    b.Property<string>("DevFName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DevLName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("DevID");
-
-                    b.ToTable("Developer");
                 });
 
             modelBuilder.Entity("Empire.Models.Employee", b =>
@@ -209,12 +155,21 @@ namespace Empire.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpID"), 1L, 1);
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Designation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LName")
@@ -225,9 +180,68 @@ namespace Empire.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("EmpID");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("Empire.Models.MSRTask", b =>
+                {
+                    b.Property<int>("MsrID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MsrID"), 1L, 1);
+
+                    b.Property<int>("AppsAppID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignedAppID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignedEmpID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MSRNote")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MSRtitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MsrID");
+
+                    b.HasIndex("AppsAppID");
+
+                    b.HasIndex("AssignedEmpID");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("Empire.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -367,23 +381,32 @@ namespace Empire.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Empire.Models.AppList", b =>
+            modelBuilder.Entity("Empire.Models.Employee", b =>
                 {
-                    b.HasOne("Empire.Models.Analyst", "Analyst")
+                    b.HasOne("Empire.Models.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("AssignedBA")
+                        .HasForeignKey("RoleId");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Empire.Models.MSRTask", b =>
+                {
+                    b.HasOne("Empire.Models.AppList", "Apps")
+                        .WithMany()
+                        .HasForeignKey("AppsAppID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empire.Models.Developer", "Developer")
+                    b.HasOne("Empire.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("AssignedDev")
+                        .HasForeignKey("AssignedEmpID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Analyst");
+                    b.Navigation("Apps");
 
-                    b.Navigation("Developer");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

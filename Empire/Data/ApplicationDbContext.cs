@@ -14,5 +14,6 @@ namespace Empire.Data
         public DbSet<AppList> Apps { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<MSRTask> Tasks { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }
