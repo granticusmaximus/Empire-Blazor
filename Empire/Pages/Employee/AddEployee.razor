@@ -2,6 +2,8 @@
 @using Empire.Data
 @using Empire.Models
 @using Empire.Service
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
 @inject EmployeeService employeeService
 @inject NavigationManager NavigationManager
 
@@ -59,9 +61,18 @@
 
 @code {
     Employee obj = new Employee();
+    List<Role> roles;
+    int selectedRoleId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await context.Roles.ToListAsync();
+        selectedRoleId = obj?.RoleId ?? roles.First().Id;
+    }
+
     protected async void CreateEmployee()
     {
-        await employeeService.InsertEmployeeAsync(obj);
+        await employeeService.InsertEmployeeAsync(obj, selectedRoleId);
         NavigationManager.NavigateTo("Employees");
     }
     void Cancel()

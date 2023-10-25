@@ -26,8 +26,16 @@ namespace Empire.Service
         #endregion
 
         #region Insert Employee
-        public async Task<bool> InsertEmployeeAsync(Employee employee)
+        public async Task<bool> InsertEmployeeAsync(Employee employee, int selectedRoleId)
         {
+            var role = await _appDBContext.Roles.FindAsync(selectedRoleId);
+            if (role == null)
+            {
+                throw new ArgumentException("Invalid role ID provided.");
+            }
+
+            employee.RoleId = selectedRoleId;
+
             await _appDBContext.Employee.AddAsync(employee);
             await _appDBContext.SaveChangesAsync();
             return true;
@@ -43,8 +51,16 @@ namespace Empire.Service
         #endregion
 
         #region Update Employee
-        public async Task<bool> UpdateEmployeeAsync(Employee employee)
+        public async Task<bool> UpdateEmployeeAsync(Employee employee, int selectedRoleId)
         {
+            var role = await _appDBContext.Roles.FindAsync(selectedRoleId);
+            if (role == null)
+            {
+                throw new ArgumentException("Invalid role ID provided.");
+            }
+
+            employee.RoleId = selectedRoleId;
+
             _appDBContext.Employee.Update(employee);
             await _appDBContext.SaveChangesAsync();
             return true;
