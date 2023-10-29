@@ -24,6 +24,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<DataSeeder>();
 builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddHttpClient();
 

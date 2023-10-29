@@ -1,0 +1,46 @@
+﻿@page "/Roles"
+@using Empire.Models
+@using Empire.Service
+@inject RoleService roleService
+@inject NavigationManager navi
+
+<h2>Roles</h2>
+<hr/>
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="AddRole">
+        <span class="oi oi-plus" aria-hidden="true">Add Role</span>
+    </NavLink>
+</div>
+@if (roles == null)
+{
+    <p>Loading roles...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in roles)
+            {
+                <tr>
+                    <td>@role.Id</td>
+                    <td>@role.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Role> roles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await roleService.GetAllRolesAsync();
+    }
+}

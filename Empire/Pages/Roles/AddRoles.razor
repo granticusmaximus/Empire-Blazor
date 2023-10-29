@@ -1,0 +1,59 @@
+﻿@page "/AddRole"
+@using Empire.Data
+@using Empire.Models
+@using Empire.Service
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
+@inject RoleService roleService
+@inject NavigationManager NavigationManager
+
+<h3>Add Role</h3>
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="Roles">
+        <span aria-hidden="true">Back to Role List</span>
+    </NavLink>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <form>
+            <div class="form-group">
+                <label for="Name" class="control-label">Role Name</label>
+                <input id="Name" class="form-control" @bind="newRole.Name" />
+            </div>
+            <hr/>
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="CreateRole" value="Create" />
+                <input type="button" class="btn btn-secondary" @onclick="Cancel" value="Cancel" />
+            </div>
+        </form>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert alert-info mt-3">
+                @message
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private Role newRole = new Role();
+    private string message = "";
+    private async Task CreateRole()
+    {
+        bool isSuccess = await roleService.CreateRoleAsync(newRole);
+        if (isSuccess)
+        {
+            message = "Role created successfully!";
+            newRole = new Role();
+        }
+        else
+        {
+            message = "Error creating the role!";
+        }
+    }
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/roles");
+    }
+}
