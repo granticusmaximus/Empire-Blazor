@@ -22,7 +22,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<DataSeeder>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
@@ -48,9 +47,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-seeder.SeedRoles();
 
 if (app.Environment.IsDevelopment())
 {

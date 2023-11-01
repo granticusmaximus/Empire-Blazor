@@ -19,8 +19,6 @@ namespace Empire.Models
         [DisplayName("App Assigned:")]
         public int AssignedAppID { get; set; }
         public AppList Apps { get; set; }
-        //public string Employee { get; set; }
-        //public string AppTitle { get; set; }
 
         [DisplayName("Task Number/MSR Title:")]
         public string MSRtitle { get; set; }
@@ -32,6 +30,5 @@ namespace Empire.Models
 
         [DisplayName("Notes:")]
         public string MSRNote { get; set; }
-
     }
 }

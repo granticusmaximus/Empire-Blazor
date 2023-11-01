@@ -10,6 +10,7 @@ namespace Empire.Data
             : base(options)
         {
         }
+
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<AppList> Apps { get; set; }
         public DbSet<Employee> Employee { get; set; }

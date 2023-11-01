@@ -1,5 +1,7 @@
 ﻿using Empire.Data;
 using Empire.Models;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,12 +13,14 @@ namespace Empire.Service
     {
         #region Property
         private readonly ApplicationDbContext _appDBContext;
+        private readonly UserManager<Employee> _userManager;
         #endregion
 
         #region Constructor
-        public EmployeeService(ApplicationDbContext appDBContext)
+        public EmployeeService(ApplicationDbContext appDBContext, UserManager<Employee> userManager)
         {
             _appDBContext = appDBContext;
+            _userManager = userManager;
         }
         #endregion
 

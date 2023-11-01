@@ -153,6 +153,9 @@ namespace Empire.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpID"), 1L, 1);
 
+                    b.Property<string>("Cellnumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -160,21 +163,16 @@ namespace Empire.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -397,7 +395,7 @@ namespace Empire.Migrations
                         .IsRequired();
 
                     b.HasOne("Empire.Models.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("MSRTasks")
                         .HasForeignKey("AssignedEmpID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -456,6 +454,11 @@ namespace Empire.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Empire.Models.Employee", b =>
+                {
+                    b.Navigation("MSRTasks");
                 });
 #pragma warning restore 612, 618
         }

@@ -31,7 +31,6 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Gender</th>
                 <th>Designation</th>
@@ -45,13 +44,12 @@ else
             @foreach (var emp in EmpObj)
             {
                 <tr>
-                    <td>@emp.EmpID</td>
-                    <td>@emp.Fullname</td>
+                    <td>@emp.FullName</td>
                     <td>@emp.Gender</td>
                     <td>@emp.Designation</td>
                     <td>@emp.City</td>
                     <td>@emp.Email</td>
-                    <td>@emp.Phone</td>
+                    <td>@emp.Cellnumber</td>
                     <td>
                         <a class="btn btn-warning" href="EditEmployee/@emp.EmpID">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
@@ -86,7 +84,7 @@ else
         else
         {
             DisplayedEmpObj = EmpObj
-                .Where(e => e.Fullname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                .Where(e => e.FullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
                             || e.Designation.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
                            ).ToList();
         }
