@@ -1,72 +1,64 @@
-﻿@page "/DeleteUser/{Id}"
+﻿@page "/DeleteUser/{UserId}"
 @using Empire.Data
 @using Empire.Models
-@using Empire.Service
-@inject ApplicationUserService userService
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
+@inject UserManager<ApplicationUser> userManager
 @inject NavigationManager NavigationManager
 
-<h2>Delete Employee</h2>
+<h3>Delete User</h3>
 <hr />
-<h3>Are you sure want to delete this?</h3>
-<form>
-    <div class="row">
-        <div class=" col-md-12">
-            <div class="form-group">
-                <label>Employee Name:</label>
-                <label>@obj.FullName</label>
-            </div>
-            <div class="form-group">
-                <label>Desigation:</label>
-                <label>@obj.Designation</label>
-            </div>
-            <div class="form-group">
-                <label>Gender:</label>
-                <label>@obj.Gender</label>
-            </div>
-            <div class="form-group">
-                <label>City:</label>
-                <label>@obj.City</label>
-            </div>
-            <div class="form-group">
-                <label>Phone:</label>
-                <label>@obj.Cellnumber</label>
-            </div>
-            <div class="form-group">
-                <label>Email:</label>
-                <label>@obj.Email</label>
-            </div>
-            <div class="form-group">
-                <label>Role:</label>
-                <label>@obj.Role</label>
-            </div>
-        </div>
 
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input type="button" class="btn btn-danger" @onclick="@DeleteUser" value="Delete" />
-                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
-            </div>
-        </div>
-    </div>
-</form>
+@if (user == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>Are you sure you want to delete user "@user.Email"?</p>
+
+    <button @onclick="DeleteUser" class="btn btn-danger">Delete</button>
+    <button @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+}
 
 @code {
-    [Parameter]
-    public string Id { get; set; }
-    ApplicationUser obj = new ApplicationUser();
+    [Parameter] public string UserId { get; set; }
+    ApplicationUser user;
+
     protected override async Task OnInitializedAsync()
     {
-        obj = await Task.Run(() => userService.GetUserAsync(obj.Id));
+        user = await userManager.FindByIdAsync(UserId);
+        if (user == null)
+        {
+            // Optionally, handle the situation where no user with the given ID is found.
+            NavigationManager.NavigateTo("/Users");
+        }
     }
-    protected async void DeleteUser()
+
+    private async Task DeleteUser()
     {
-        await userService.DeleteUserAsync(obj);
-        NavigationManager.NavigateTo("Users");
+        try
+        {
+            var result = await userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                NavigationManager.NavigateTo("/Users");
+            }
+            else
+            {
+                // Handle the error appropriately, maybe display a message to the user.
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle the error appropriately, maybe display a message to the user.
+        }
     }
+
     void Cancel()
     {
-        NavigationManager.NavigateTo("Users");
+        NavigationManager.NavigateTo("/Users");
     }
 }
