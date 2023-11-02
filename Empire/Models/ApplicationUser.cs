@@ -26,5 +26,12 @@ namespace Empire.Models
 
         [Display(Name = "Profile Picture")]
         public byte[] ProfilePicture { get; set; }
+
+        public string? Gender { get; set; }
+        public string? City { get; set; }
+        public string? Designation { get; set; }
+        public int? RoleId { get; set; }
+        public Role? Role { get; set; }
+        public ICollection<MSRTask> MSRTasks { get; set; }
     }
 }

@@ -48,6 +48,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9sZXNcUm9sZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Users/AddUser.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcQWRkVXNlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Users/Delete.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcRGVsZXRlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [Z:/Desktop/Development/CSharp/Empire/Empire/Shared/LoginDisplay.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luRGlzcGxheS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

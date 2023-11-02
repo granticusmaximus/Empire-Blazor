@@ -2,7 +2,6 @@ using Empire.Areas.Identity;
 using Empire.Data;
 using Empire.Models;
 using Empire.Service;
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -22,10 +21,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));
+
 
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
 

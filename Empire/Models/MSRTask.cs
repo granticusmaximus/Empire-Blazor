@@ -10,10 +10,10 @@ namespace Empire.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MsrID { get; set; }
 
-        [ForeignKey("Employee")]
-        [DisplayName("Employee Assigned:")]
-        public int AssignedEmpID { get; set; }
-        public Employee Employee { get; set; }
+        [ForeignKey("ApplicationUser")]
+        [DisplayName("User Assigned:")]
+        public int AssignedUserID { get; set; }
+        public ApplicationUser AppUser { get; set; }
 
         [ForeignKey("AppList")]
         [DisplayName("App Assigned:")]

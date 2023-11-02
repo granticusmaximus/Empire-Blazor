@@ -1,0 +1,128 @@
+﻿@page "/AddUser"
+@using Empire.Data
+@using Empire.Models
+@using Empire.Service
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
+@inject UserManager<ApplicationUser> userManager
+@inject NavigationManager NavigationManager
+@inject IEmailService emailService
+
+<h3>Add User</h3>
+<hr />
+
+<EditForm Model="@obj" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row">
+        <!-- ... other fields ... -->
+        <div class="form-group">
+            <label for="FirstName" class="control-label">First Name</label>
+            <InputText id="FirstName" class="form-control" @bind-Value="@obj.FirstName" />
+            <ValidationMessage For="@(() => obj.FirstName)" />
+        </div>
+        <div class="form-group">
+            <label for="LastName" class="control-label">Last Name</label>
+            <InputText id="LastName" class="form-control" @bind-Value="@obj.LastName" />
+            <ValidationMessage For="@(() => obj.LastName)" />
+        </div>
+        <div class="form-group">
+            <label for="RoleId" class="control-label">Role</label>
+            <InputSelect id="RoleId" class="form-control" @bind-Value="@obj.RoleId">
+                @foreach (var role in roles)
+                {
+                    <option value="@role.Id">@role.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => obj.RoleId)" />
+        </div>
+        <div class="form-group">
+            <label for="Address" class="control-label">Address</label>
+            <InputText id="Address" class="form-control" @bind-Value="@obj.Address" />
+            <ValidationMessage For="@(() => obj.Address)" />
+        </div>
+        <div class="form-group">
+            <label for="Cellnumber" class="control-label">Cell Number</label>
+            <InputText id="Cellnumber" class="form-control" @bind-Value="@obj.Cellnumber" />
+            <ValidationMessage For="@(() => obj.Cellnumber)" />
+        </div>
+        <div class="form-group">
+            <label for="Gender" class="control-label">Gender</label>
+            <InputText id="Gender" class="form-control" @bind-Value="@obj.Gender" />
+            <ValidationMessage For="@(() => obj.Gender)" />
+        </div>
+        <div class="form-group">
+            <label for="City" class="control-label">City</label>
+            <InputText id="City" class="form-control" @bind-Value="@obj.City" />
+            <ValidationMessage For="@(() => obj.City)" />
+        </div>
+        <div class="form-group">
+            <label for="Designation" class="control-label">Designation</label>
+            <InputText id="Designation" class="form-control" @bind-Value="@obj.Designation" />
+            <ValidationMessage For="@(() => obj.Designation)" />
+        </div>
+        <div class="form-group">
+            <label for="Email" class="control-label">Email</label>
+            <InputText id="Email" class="form-control" @bind-Value="@obj.Email" />
+            <ValidationMessage For="@(() => obj.Email)" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button class="btn btn-danger" @onclick="Cancel">Cancel</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    ApplicationUser obj = new ApplicationUser();
+    List<Role> roles = new List<Role>();
+    string message = string.Empty;
+    bool isProcessing = false;
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await context.Roles.ToListAsync();
+        if (roles.Any())
+        {
+            obj.RoleId = roles.First().Id;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isProcessing = true;
+        try
+        {
+            var result = await userManager.CreateAsync(obj); 
+            if (result.Succeeded)
+            {
+                var code = await userManager.GeneratePasswordResetTokenAsync(obj);
+                var callbackUrl = NavigationManager.ToAbsoluteUri($"/SetPassword?userId={obj.Id}&code={code}");
+                await emailService.SendEmailAsync(obj.Email, "Set Your Password", $"Please set your password by <a href='{callbackUrl}'>clicking here</a>.");
+
+                message = "User created successfully";
+                NavigationManager.NavigateTo("Users");
+            }
+            else
+            {
+                message = "User creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description));
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Users");
+    }
+}
