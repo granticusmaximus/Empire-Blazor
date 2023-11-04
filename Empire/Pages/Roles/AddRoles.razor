@@ -7,13 +7,6 @@
 @inject RoleService roleService
 @inject NavigationManager NavigationManager
 
-<h3>Add Role</h3>
-<hr />
-<div class="col-md-6">
-    <NavLink class="btn btn-success" href="Roles">
-        <span aria-hidden="true">Back to Role List</span>
-    </NavLink>
-</div>
 <div class="row">
     <div class="col-md-6">
         <form>
@@ -24,7 +17,6 @@
             <hr/>
             <div class="form-group">
                 <input type="button" class="btn btn-primary" @onclick="CreateRole" value="Create" />
-                <input type="button" class="btn btn-secondary" @onclick="Cancel" value="Cancel" />
             </div>
         </form>
         @if (!string.IsNullOrEmpty(message))

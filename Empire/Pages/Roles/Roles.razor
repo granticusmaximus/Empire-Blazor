@@ -4,13 +4,6 @@
 @inject RoleService roleService
 @inject NavigationManager navi
 
-<h2>Roles</h2>
-<hr/>
-<div class="col-md-6">
-    <NavLink class="btn btn-success" href="AddRole">
-        <span class="oi oi-plus" aria-hidden="true">Add Role</span>
-    </NavLink>
-</div>
 @if (roles == null)
 {
     <p>Loading roles...</p>

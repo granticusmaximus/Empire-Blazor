@@ -1,6 +1,7 @@
 ﻿@page "/Users"
 @using Empire.Data
 @using Empire.Models
+@using Empire.Pages.Roles
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,10 @@
 <hr />
 <div class="col-md-6">
     <NavLink class="btn btn-success" href="AddUser">
-        <span class="oi oi-plus" aria-hidden="true">Add User</span>
+        <span aria-hidden="true">Add User</span>
     </NavLink>
+    <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
+    <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
 </div>
 
 @if (users == null)
@@ -54,10 +57,74 @@ else
             }
         </tbody>
     </table>
+
+    <!-- Role List Modal -->
+    <div class="modal fade @(showRoleListModal ? "show d-block" : "")" id="listRoleModal" tabindex="-1" role="dialog" aria-labelledby="listRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="listRoleModalLabel">List of Roles</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseRoleListModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <Roles />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseRoleListModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Role Modal -->
+    <div class="modal fade @(showAddRoleModal ? "show d-block" : "")" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addRoleModalLabel">Add New Role</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseNewRoleModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <AddRoles />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseNewRoleModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 }
+
 
 @code {
     private List<ApplicationUser> users;
+    private bool showAddRoleModal = false;
+    private bool showRoleListModal = false;
+
+    private void OpenRoleListModal()
+    {
+        showRoleListModal = true;
+    }
+
+    private void CloseRoleListModal()
+    {
+        showRoleListModal = false;
+    }
+
+    private void OpenNewRoleModal()
+    {
+        showAddRoleModal = true;
+    }
+
+    private void CloseNewRoleModal()
+    {
+        showAddRoleModal = false;
+    }
 
     protected override async Task OnInitializedAsync()
     {
