@@ -1,5 +1,86 @@
-﻿<h3>Users</h3>
+﻿@page "/Users"
+@using Empire.Data
+@using Empire.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore;
+@inject ApplicationDbContext context
+@inject UserManager<ApplicationUser> userManager
+@inject NavigationManager navi
+
+<h3>Users</h3>
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="AddUser">
+        <span class="oi oi-plus" aria-hidden="true">Add User</span>
+    </NavLink>
+</div>
+
+@if (users == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Cell #</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Designation</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.FullName</td>
+                    <td>@user.Cellnumber</td>
+                    <td>@user.Address</td>
+                    <td>@user.City</td>
+                    <td>@user.Designation</td>
+                    <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
+                    <td>
+                        <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
+                        <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<ApplicationUser> users;
 
+    protected override async Task OnInitializedAsync()
+    {
+        users = await userManager.Users.Include(u => u.Role).ToListAsync();
+    }
+
+    private void EditUser(ApplicationUser user)
+    {
+        navi.NavigateTo($"/EditUser/{user.Id}");
+    }
+
+    private async Task DeleteUser(ApplicationUser user)
+    {
+        var result = await userManager.DeleteAsync(user);
+        if (result.Succeeded)
+        {
+            // Refresh the list after deletion
+            users = await userManager.Users.ToListAsync();
+            StateHasChanged();  // Notify Blazor to re-render the component
+        }
+        else
+        {
+            // Handle the error appropriately, maybe display a message to the user.
+        }
+    }
 }
