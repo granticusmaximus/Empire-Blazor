@@ -1,0 +1,71 @@
+﻿@page "/editapp/{AppId:int}"
+@using Empire.Models
+@using Empire.Service
+@using Empire.Data
+@inject AppService appService
+@inject NavigationManager navigationManager
+
+<h3>Edit App</h3>
+<hr />
+
+@if (app == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="app" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label for="AppName">@app.AppName</label>
+            <InputText id="AppName" @bind-Value="app.AppName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="AppNotes">@app.AppNotes</label>
+            <InputText id="AppNotes" @bind-Value="app.AppNotes" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="POC">@app.POC</label>
+            <InputText id="POC" @bind-Value="app.POC" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="Telephone">@app.Telephone</label>
+            <InputText id="Telephone" @bind-Value="app.Telephone" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="POCEmail">@app.POCEmail</label>
+            <InputText id="POCEmail" @bind-Value="app.POCEmail" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <button @onclick="NavigateBack" class="btn btn-secondary">Cancel</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int AppId { get; set; }
+
+    private AppList app;
+
+    protected override async Task OnInitializedAsync()
+    {
+        app = await appService.GetAppByIdAsync(AppId);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (await appService.UpdateAppAsync(app))
+        {
+            navigationManager.NavigateTo("/apps"); 
+        }
+        else
+        {
+            navigationManager.NavigateTo("/apps");
+        }
+    }
+
+    private void NavigateBack()
+    {
+        navigationManager.NavigateTo("/apps");
+    }
+}

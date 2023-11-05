@@ -148,7 +148,7 @@ else
         var currentUser = await userManager.GetUserAsync(signInManager.Context.User);
         if (currentUser != null && currentUser.Role != null)
         {
-            IsAdmin = currentUser.Role.Id == 1;
+            IsAdmin = currentUser.Role.Name == "Admin";
         }
     }
 

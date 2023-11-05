@@ -1,0 +1,62 @@
+﻿@page "/AddApp"
+@using Empire.Data
+@using Empire.Models
+@using Empire.Service
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext context
+@inject IJSRuntime JSRuntime
+@inject AppService appService
+
+<h3>Create New Application</h3>
+
+<EditForm Model="newApp" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="AppName">@newApp.AppName's DisplayName</label>
+        <InputText id="AppName" class="form-control" @bind-Value="newApp.AppName" />
+    </div>
+
+    <div class="form-group">
+        <label for="AppNotes">@newApp.AppNotes's DisplayName</label>
+        <InputText id="AppNotes" class="form-control" @bind-Value="newApp.AppNotes" />
+    </div>
+
+    <div class="form-group">
+        <label for="POC">@newApp.POC's DisplayName</label>
+        <InputText id="POC" class="form-control" @bind-Value="newApp.POC" />
+    </div>
+
+    <div class="form-group">
+        <label for="Telephone">@newApp.Telephone's DisplayName</label>
+        <InputText id="Telephone" class="form-control" @bind-Value="newApp.Telephone" />
+    </div>
+
+    <div class="form-group">
+        <label for="POCEmail">@newApp.POCEmail's DisplayName</label>
+        <InputText id="POCEmail" class="form-control" @bind-Value="newApp.POCEmail" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+@code {
+    private AppList newApp = new AppList();
+
+    private async Task HandleValidSubmit()
+    {
+        bool isCreated = await appService.CreateNewAppAsync(newApp);
+        if (isCreated)
+        {
+            // You can navigate to another page or show a success message
+            // For now, let's reset the form and show an alert
+            newApp = new AppList();
+            JSRuntime.InvokeVoidAsync("alert", "Application created successfully!");
+        }
+        else
+        {
+            // Handle the error. Perhaps show an error message to the user.
+        }
+    }
+}

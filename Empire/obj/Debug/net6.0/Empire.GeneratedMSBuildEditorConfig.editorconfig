@@ -20,8 +20,24 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/AddApp.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xBZGRBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/DeleteApp.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xEZWxldGVBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/EditApp.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xFZGl0QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/MSRTasks/AddTask.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTVNSVGFza3NcQWRkVGFzay5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Roles/AddRoles.razor]

@@ -12,14 +12,6 @@ namespace Empire.Models
         [DisplayName("Application Name:")]
         public string AppName { get; set; }
 
-        [ForeignKey("Analyst")]
-        [DisplayName("BA Assigned:")]
-        public int AssignedBA { get; set; }
-
-        [ForeignKey("Developer")]
-        [DisplayName("Dev Assigned:")]
-        public int AssignedDev { get; set; }
-
         [DisplayName("Purpose:")]
         public string AppNotes { get; set; }
 
