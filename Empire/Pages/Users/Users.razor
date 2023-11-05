@@ -13,20 +13,14 @@
 <h3>Users</h3>
 <hr />
 <div class="col-md-6">
-    @if (IsAdmin)
-    {
-        <NavLink class="btn btn-success" href="AddUser">
-            <span aria-hidden="true">Add User</span>
-        </NavLink>
-    }
+    <NavLink class="btn btn-success" href="AddUser">
+        <span aria-hidden="true">Add User</span>
+    </NavLink>
     <span>
         <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
     </span>
     <span>
-        @if (IsAdmin)
-        {
-            <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
-        }
+        <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
     </span>
 </div>
 
@@ -46,10 +40,7 @@ else
                 <th>City</th>
                 <th>Designation</th>
                 <th>Role</th>
-                @if (IsAdmin)
-                {
-                    <th>Actions</th>
-                }
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -63,13 +54,10 @@ else
                     <td>@user.City</td>
                     <td>@user.Designation</td>
                     <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
-                    @if (IsAdmin)
-                    {
-                        <td>
-                            <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
-                            <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                    }
+                    <td>
+                        <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
+                        <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
