@@ -46,7 +46,10 @@ else
                 <th>City</th>
                 <th>Designation</th>
                 <th>Role</th>
-                <th>Actions</th>
+                @if (IsAdmin)
+                {
+                    <th>Actions</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -60,13 +63,13 @@ else
                     <td>@user.City</td>
                     <td>@user.Designation</td>
                     <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
-                    <td>
-                        @if (IsAdmin)
-                        {
+                    @if (IsAdmin)
+                    {
+                        <td>
                             <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
                             <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
-                        }
-                    </td>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
