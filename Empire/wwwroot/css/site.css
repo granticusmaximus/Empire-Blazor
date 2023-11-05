@@ -19,6 +19,18 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.top-row {
+    background-color: #05163d !important;
+}
+
+.top-row {
+    background-color: #05163d !important;
+}
+
+.sidebar {
+    background: black !important;
+}
+
 .content {
     padding-top: 1.1rem;
 }

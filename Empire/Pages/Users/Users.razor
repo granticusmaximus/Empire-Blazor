@@ -7,16 +7,27 @@
 @using Microsoft.EntityFrameworkCore;
 @inject ApplicationDbContext context
 @inject UserManager<ApplicationUser> userManager
+@inject SignInManager<ApplicationUser> signInManager
 @inject NavigationManager navi
 
 <h3>Users</h3>
 <hr />
 <div class="col-md-6">
-    <NavLink class="btn btn-success" href="AddUser">
-        <span aria-hidden="true">Add User</span>
-    </NavLink>
-    <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
-    <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
+    @if (IsAdmin)
+    {
+        <NavLink class="btn btn-success" href="AddUser">
+            <span aria-hidden="true">Add User</span>
+        </NavLink>
+    }
+    <span>
+        <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
+    </span>
+    <span>
+        @if (IsAdmin)
+        {
+            <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
+        }
+    </span>
 </div>
 
 @if (users == null)
@@ -50,8 +61,11 @@ else
                     <td>@user.Designation</td>
                     <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
                     <td>
-                        <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
-                        <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+                        @if (IsAdmin)
+                        {
+                            <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
+                            <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+                        }
                     </td>
                 </tr>
             }
@@ -105,6 +119,7 @@ else
     private List<ApplicationUser> users;
     private bool showAddRoleModal = false;
     private bool showRoleListModal = false;
+    private bool IsAdmin { get; set; }
 
     private void OpenRoleListModal()
     {
@@ -128,12 +143,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await CheckIfUserIsAdmin();
         users = await userManager.Users.Include(u => u.Role).ToListAsync();
     }
 
     private void EditUser(ApplicationUser user)
     {
         navi.NavigateTo($"/EditUser/{user.Id}");
+    }
+
+    private async Task CheckIfUserIsAdmin()
+    {
+        var currentUser = await userManager.GetUserAsync(signInManager.Context.User);
+        if (currentUser != null && currentUser.Role != null)
+        {
+            IsAdmin = currentUser.Role.Id == 1;
+        }
     }
 
     private async Task DeleteUser(ApplicationUser user)
