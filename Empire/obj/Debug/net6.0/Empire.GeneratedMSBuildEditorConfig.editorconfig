@@ -24,6 +24,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xBZGRBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/AppDetails.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xBcHBEZXRhaWxzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/Apps.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xBcHBzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [Z:/Desktop/Development/CSharp/Empire/Empire/Pages/Apps/DeleteApp.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwc1xEZWxldGVBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

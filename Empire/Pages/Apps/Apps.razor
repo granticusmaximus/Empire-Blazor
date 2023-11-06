@@ -1,0 +1,152 @@
+﻿@page "/Apps"
+@using Empire.Data
+@using Empire.Models
+@using Empire.Service
+@using Empire.Pages.Apps
+@inject AppService appService
+@inject ApplicationDbContext context
+
+<h3>Apps</h3>
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="AddApp">
+        <span aria-hidden="true">Add App</span>
+    </NavLink>
+</div>
+
+@if (apps == null)
+{
+    <p>Loading...</p>
+}
+else if (apps.Count == 0)
+{
+    <p>No applications found.</p>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>App Name</th>
+                <th>POC/Owner</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in apps)
+            {
+                <tr>
+                    <td>@app.AppName</td>
+                    <td>@app.POC</td>
+                    <td>
+                        <button @onclick="OpenAppDetailsModal" class="btn btn-warning">Details</button>
+                        <button @onclick="OpenAppEditModal" class="btn btn-warning">Edit</button>
+                        <button @onclick="OpenAppDeleteModal" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- App Details Modal -->
+    <div class="modal fade @(showAppDetailsModal ? "show d-block" : "")" id="addDetailsModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appDetailsModalLabel">App Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAppDetailsModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <AppDetails />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAppDetailsModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add App Modal -->
+    <div class="modal fade @(showAppEditModal ? "show d-block" : "")" id="addAppModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="appAppModalLabel">Add New App</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAppEditModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <AddApp />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAppEditModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete App Modal -->
+    <div class="modal fade @(showAppDeleteModal ? "show d-block" : "")" id="deleteAppModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAppModalLabel">Delete App</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAppDeleteModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <DeleteApp />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAppDeleteModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<AppList> apps;
+    private bool showAppDetailsModal = false;
+    private bool showAppEditModal = false;
+    private bool showAppDeleteModal = false;
+
+    private void OpenAppDetailsModal()
+    {
+        showAppDetailsModal = true;
+    }
+
+    private void CloseAppDetailsModal()
+    {
+        showAppDetailsModal = false;
+    }
+
+    private void OpenAppEditModal()
+    {
+        showAppEditModal = true;
+    }
+
+    private void CloseAppEditModal()
+    {
+        showAppEditModal = false;
+    }
+
+    private void OpenAppDeleteModal()
+    {
+        showAppDeleteModal = true;
+    }
+
+    private void CloseAppDeleteModal()
+    {
+        showAppDeleteModal = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        apps = await appService.GetAllAppsAsync();
+    }
+}

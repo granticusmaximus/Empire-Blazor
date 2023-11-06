@@ -7,36 +7,37 @@
 @inject IJSRuntime JSRuntime
 @inject AppService appService
 
-<h3>Create New Application</h3>
+<h3>Create New App</h3>
 
 <EditForm Model="newApp" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
-        <label for="AppName">@newApp.AppName's DisplayName</label>
-        <InputText id="AppName" class="form-control" @bind-Value="newApp.AppName" />
+        <label for="AppName">Application Name:</label>
+        <InputText id="AppName" class="form-control" @bind-Value="newApp.AppName" placeholder="Enter application name" />
     </div>
 
     <div class="form-group">
-        <label for="AppNotes">@newApp.AppNotes's DisplayName</label>
-        <InputText id="AppNotes" class="form-control" @bind-Value="newApp.AppNotes" />
+        <label for="POC">POC/Owner:</label>
+        <InputText id="POC" class="form-control" @bind-Value="newApp.POC" placeholder="Enter name of POC/Owner" />
     </div>
 
     <div class="form-group">
-        <label for="POC">@newApp.POC's DisplayName</label>
-        <InputText id="POC" class="form-control" @bind-Value="newApp.POC" />
+        <label for="Telephone">POC #:</label>
+        <InputText id="Telephone" class="form-control" @bind-Value="newApp.Telephone" placeholder="Enter POC's phone number" />
     </div>
 
     <div class="form-group">
-        <label for="Telephone">@newApp.Telephone's DisplayName</label>
-        <InputText id="Telephone" class="form-control" @bind-Value="newApp.Telephone" />
+        <label for="POCEmail">POC Email:</label>
+        <InputText id="POCEmail" class="form-control" @bind-Value="newApp.POCEmail" placeholder="Enter POC's email" />
     </div>
 
     <div class="form-group">
-        <label for="POCEmail">@newApp.POCEmail's DisplayName</label>
-        <InputText id="POCEmail" class="form-control" @bind-Value="newApp.POCEmail" />
+        <label for="AppNotes">Purpose:</label>
+        <InputTextArea id="AppNotes" class="form-control" @bind-Value="newApp.AppNotes" placeholder="Enter purpose of the application" />
     </div>
+    <hr/>
 
     <button type="submit" class="btn btn-primary">Create</button>
 </EditForm>
@@ -49,14 +50,12 @@
         bool isCreated = await appService.CreateNewAppAsync(newApp);
         if (isCreated)
         {
-            // You can navigate to another page or show a success message
-            // For now, let's reset the form and show an alert
             newApp = new AppList();
-            JSRuntime.InvokeVoidAsync("alert", "Application created successfully!");
+            await JSRuntime.InvokeVoidAsync("alert", "Application created successfully!");
         }
         else
         {
-            // Handle the error. Perhaps show an error message to the user.
+            // Handle the failure scenario, perhaps show a message to the user
         }
     }
 }
