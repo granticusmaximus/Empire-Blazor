@@ -4,6 +4,13 @@ using System.ComponentModel;
 
 namespace Empire.Models
 {
+    public enum TaskStatus
+    {
+        Backlog,
+        InProgress,
+        Done
+    }
+
     public class MSRTask
     {
         [Key]
@@ -30,5 +37,8 @@ namespace Empire.Models
 
         [DisplayName("Notes:")]
         public string MSRNote { get; set; }
+
+        [DisplayName("Status")]
+        public TaskStatus Status { get; set; } = TaskStatus.Backlog;
     }
 }
