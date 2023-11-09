@@ -1,0 +1,59 @@
+﻿@page "/task/details/{MsrID:int}"
+@using Empire.Models
+@using Empire.Service
+@inject MSRService MSRTaskService
+@inject NavigationManager navi
+
+<h3>MSR Task Details</h3>
+
+@if (msrTask == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <dl class="row">
+        <dt class="col-sm-3">Task ID:</dt>
+        <dd class="col-sm-9">@msrTask.MsrID</dd>
+
+        <dt class="col-sm-3">Title:</dt>
+        <dd class="col-sm-9">@msrTask.MSRtitle</dd>
+
+        <dt class="col-sm-3">Assigned User:</dt>
+        <dd class="col-sm-9">@msrTask.AppUser.UserName</dd>
+
+        <dt class="col-sm-3">Assigned App:</dt>
+        <dd class="col-sm-9">@msrTask.Apps.AppName</dd> 
+
+        <dt class="col-sm-3">Date Added:</dt>
+        <dd class="col-sm-9">@msrTask.DateAdded.ToString("MM/dd/yyyy")</dd>
+
+        <dt class="col-sm-3">Notes:</dt>
+        <dd class="col-sm-9">@msrTask.MSRNote</dd>
+    </dl>
+
+    <button class="btn btn-primary" @onclick="EditTask">Edit</button>
+    <button class="btn btn-secondary" @onclick="BackToList">Back to List</button>
+}
+
+@code {
+    [Parameter]
+    public int MsrID { get; set; }
+
+    private MSRTask msrTask;
+
+    protected override async Task OnInitializedAsync()
+    {
+        msrTask = await MSRTaskService.GetMSRTaskByIdAsync(MsrID);
+    }
+
+    private void EditTask()
+    {
+        navi.NavigateTo($"/task/edit/{msrTask.MsrID}");
+    }
+
+    private void BackToList()
+    {
+        navi.NavigateTo("/tasks");
+    }
+}

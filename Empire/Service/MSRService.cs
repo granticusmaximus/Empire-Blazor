@@ -18,47 +18,52 @@ namespace Empire.Service
             _context = context;
         }
 
-        // Create a new msr
-        public async Task<bool> CreateMSRAsync(MSRTask task)
+        // Create a new MSR Task
+        public async Task<bool> CreateMSRTaskAsync(MSRTask msrTask)
         {
-            if (task == null)
-                throw new ArgumentNullException(nameof(task));
+            if (msrTask == null)
+                throw new ArgumentNullException(nameof(msrTask));
 
-            _context.Tasks.Add(task);
+            _context.Tasks.Add(msrTask);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        // Retrieve a task by ID
-        public async Task<MSRTask> GetTaskByIdAsync(int id)
+        // Get an MSR Task by ID
+        public async Task<MSRTask> GetMSRTaskByIdAsync(int id)
         {
-            return await _context.Tasks.FindAsync(id);
+            return await _context.Tasks
+                .Include(t => t.AppUser)
+                .Include(t => t.Apps)
+                .FirstOrDefaultAsync(t => t.MsrID == id);
         }
 
-        // Retrieve all tasks
-        public async Task<List<MSRTask>> GetAllTasksAsync()
+        // Get all MSR Tasks
+        public async Task<List<MSRTask>> GetAllMSRTasksAsync()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks
+                .Include(t => t.AppUser) 
+                .Include(t => t.Apps)
+                .ToListAsync();
         }
 
-        // Update an existing task
-        public async Task<bool> UpdateTaskAsync(MSRTask task)
+        // Update an existing MSR Task
+        public async Task<bool> UpdateMSRTaskAsync(MSRTask msrTask)
         {
-            if (task == null)
-                throw new ArgumentNullException(nameof(task));
+            if (msrTask == null)
+                throw new ArgumentNullException(nameof(msrTask));
 
-            _context.Tasks.Update(task);
+            _context.Tasks.Update(msrTask);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        // Delete a task by ID
-        public async Task<bool> DeleteTaskAsync(int id)
+        // Delete an MSR Task
+        public async Task<bool> DeleteMSRTaskAsync(int id)
         {
-            MSRTask? task = await _context.Tasks.FindAsync(id);
-
-            if (task == null)
+            MSRTask? msrTask = await _context.Tasks.FindAsync(id);
+            if (msrTask == null)
                 return false;
 
-            _context.Tasks.Remove(task);
+            _context.Tasks.Remove(msrTask);
             return await _context.SaveChangesAsync() > 0;
         }
     }

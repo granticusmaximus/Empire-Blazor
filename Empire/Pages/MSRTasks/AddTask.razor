@@ -1,60 +1,77 @@
-﻿@page "/AddTask"
-@using Empire.Data
+﻿@page "/addtask"
 @using Empire.Models
+@using Empire.Data
 @using Empire.Service
-@using Microsoft.EntityFrameworkCore
-@inject ApplicationDbContext context
-@inject MSRService taskService
-@inject NavigationManager NavigationManager
+@inject MSRService MSRTaskService
 
 <h3>Add New Task</h3>
-<hr/>
-<div class="row">
-    <div class="col-md-6">
-        <form>
-            <div class="form-group">
-                <label for="Title" class="control-label">Task Title</label>
-                <input id="Title" class="form-control" @bind="newTask.MSRtitle" />
-            </div>
-            <div class="form-group">
-                <label for="Date" class="control-label">Date Added</label>
-                <input id="Date" class="form-control" @bind="newTask.DateAdded" />
-            </div>
-            <div class="form-group">
-                <label for="Note" class="control-label">Description</label>
-                <InputTextArea id="Note" class="form-control" @bind="newTask.MSRNote" />
-            </div>
-            <hr />
-            <div class="form-group">
-                <input type="button" class="btn btn-primary" @onclick="CreateTask" value="Create" />
-            </div>
-        </form>
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <div class="alert alert-info mt-3">
-                @message
-            </div>
-        }
+
+<EditForm Model="@MSRTask" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="AssignedUserID">User Assigned:</label>
+        <InputSelect @bind-Value="MSRTask.AssignedUserID" class="form-control" id="AssignedUserID">
+            <option value="">-- Select User --</option>
+            @foreach (var user in users)
+            {
+                <option value="@user.Id">@user.FullName</option>
+            }
+        </InputSelect>
     </div>
-</div>
+
+    <div class="form-group">
+        <label for="AssignedAppID">App Assigned:</label>
+        <InputSelect @bind-Value="MSRTask.AssignedAppID" class="form-control" id="AssignedAppID">
+            <option value="">-- Select App --</option>
+            @foreach (var app in apps)
+            {
+                <option value="@app.AppID">@app.AppName</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="MSRtitle">Task Number/MSR Title:</label>
+        <InputText @bind-Value="MSRTask.MSRtitle" class="form-control" id="MSRtitle" />
+    </div>
+
+    <div class="form-group">
+        <label for="DateAdded">Date Completed:</label>
+        <InputDate @bind-Value="MSRTask.DateAdded" class="form-control" id="DateAdded" />
+    </div>
+
+    <div class="form-group">
+        <label for="MSRNote">Notes:</label>
+        <InputTextArea @bind-Value="MSRTask.MSRNote" class="form-control" id="MSRNote" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Task</button>
+</EditForm>
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-3">
+        @message
+    </div>
+}
 @code {
-    private MSRTask newTask = new MSRTask();
+    private MSRTask MSRTask = new MSRTask();
     private string message = "";
-    private async Task CreateTask()
+    private List<ApplicationUser> users = new List<ApplicationUser>();
+    private List<AppList> apps = new List<AppList>();
+
+    private async Task HandleValidSubmit()
     {
-        bool isSuccess = await taskService.CreateMSRAsync(newTask);
-        if (isSuccess)
+        bool result = await MSRTaskService.CreateMSRTaskAsync(MSRTask);
+        if (result)
         {
             message = "Task created successfully!";
-            newTask = new MSRTask();
+            MSRTask = new MSRTask();
         }
         else
         {
             message = "Error creating the task!";
         }
-    }
-    private void Cancel()
-    {
-        NavigationManager.NavigateTo("/tasks");
     }
 }
