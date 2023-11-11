@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Empire.Models
 {
-    public enum TaskStatus
+    public enum MSRTaskStatus
     {
         Backlog,
         InProgress,
@@ -19,13 +19,13 @@ namespace Empire.Models
 
         [ForeignKey("ApplicationUser")]
         [DisplayName("User Assigned:")]
-        public int AssignedUserID { get; set; }
-        public ApplicationUser AppUser { get; set; }
+        public string? AssignedUserID { get; set; }
+        public ApplicationUser? AppUser { get; set; }
 
         [ForeignKey("AppList")]
         [DisplayName("App Assigned:")]
-        public int AssignedAppID { get; set; }
-        public AppList Apps { get; set; }
+        public int? AssignedAppID { get; set; }
+        public AppList? Apps { get; set; }
 
         [DisplayName("Task Number/MSR Title:")]
         public string MSRtitle { get; set; }
@@ -39,6 +39,6 @@ namespace Empire.Models
         public string MSRNote { get; set; }
 
         [DisplayName("Status")]
-        public TaskStatus Status { get; set; } = TaskStatus.Backlog;
+        public MSRTaskStatus? Status { get; set; } = MSRTaskStatus.Backlog;
     }
 }

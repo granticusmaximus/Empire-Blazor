@@ -4,6 +4,7 @@ using Empire.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111013838_MSRTaskEntityUpdate")]
+    partial class MSRTaskEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,16 +164,17 @@ namespace Empire.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MsrID"), 1L, 1);
 
                     b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("AppsAppID")
+                    b.Property<int>("AppsAppID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AssignedAppID")
+                    b.Property<int>("AssignedAppID")
                         .HasColumnType("int");
 
-                    b.Property<string>("AssignedUserID")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AssignedUserID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
@@ -184,7 +187,7 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Status")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("MsrID");
@@ -363,11 +366,15 @@ namespace Empire.Migrations
                 {
                     b.HasOne("Empire.Models.ApplicationUser", "AppUser")
                         .WithMany("MSRTasks")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Empire.Models.AppList", "Apps")
                         .WithMany()
-                        .HasForeignKey("AppsAppID");
+                        .HasForeignKey("AppsAppID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
 

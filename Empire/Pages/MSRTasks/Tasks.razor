@@ -1,0 +1,72 @@
+﻿@page "/Tasks"
+@using Empire.Service
+@using Empire.Models
+@using Empire.ViewModels
+@inject NavigationManager navi
+@inject MSRService taskService
+
+<h3>Task Board</h3>
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="AddTask">
+        <span aria-hidden="true">Add Task</span>
+    </NavLink>
+</div>
+<div class="task-board">
+    <div class="task-column">
+        <h5>Backlog</h5>
+        <div class="task-list">
+            @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.Backlog))
+            {
+                <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
+                    <div><strong>Title:</strong> @task.MSRtitle</div>
+                    <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
+                    <!-- Add more task details as needed -->
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="task-column">
+        <h5>In Progress</h5>
+        <div class="task-list">
+            @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.InProgress))
+            {
+                <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
+                    <div><strong>Title:</strong> @task.MSRtitle</div>
+                    <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
+                    <!-- Add more task details as needed -->
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="task-column">
+        <h5>Done</h5>
+        <div class="task-list">
+            @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.Done))
+            {
+                <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
+                    <div><strong>Title:</strong> @task.MSRtitle</div>
+                    <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<MSRTask> tasks;
+    private TaskColumns taskColumns;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allTasks = await taskService.GetAllMSRTasksAsync();
+        taskColumns = new TaskColumns(allTasks);
+    }
+
+    private void NavigateToTaskDetails(int taskId)
+    {
+        navi.NavigateTo($"/task/details/{taskId}");
+    }
+}

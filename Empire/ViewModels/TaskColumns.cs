@@ -1,5 +1,5 @@
 ﻿using Empire.Models;
-using TaskStatus = Empire.Models.TaskStatus;
+using TaskStatus = Empire.Models.MSRTaskStatus;
 
 namespace Empire.ViewModels
 {
