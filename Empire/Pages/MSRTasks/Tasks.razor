@@ -2,6 +2,7 @@
 @using Empire.Service
 @using Empire.Models
 @using Empire.ViewModels
+@using Empire.Pages.MSRTasks
 @inject NavigationManager navi
 @inject MSRService taskService
 
@@ -11,18 +12,25 @@
     <NavLink class="btn btn-success" href="AddTask">
         <span aria-hidden="true">Add Task</span>
     </NavLink>
+    <span>
+        <button @onclick="OpenAddNewTaskModal" class="btn btn-warning">New Task Button</button>
+    </span>
 </div>
 <div class="task-board">
     <div class="task-column">
         <h5>Backlog</h5>
         <div class="task-list">
-            @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.Backlog))
+            @if (tasks != null)
             {
-                <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
-                    <div><strong>Title:</strong> @task.MSRtitle</div>
-                    <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
-                    <!-- Add more task details as needed -->
-                </div>
+                @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.Backlog))
+                {
+                    <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
+                        <div><strong>Title:</strong> @task.MSRtitle</div>
+                        <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
+                        <!-- Add more task details as needed -->
+                    </div>
+                }
+
             }
         </div>
     </div>
@@ -30,13 +38,17 @@
     <div class="task-column">
         <h5>In Progress</h5>
         <div class="task-list">
-            @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.InProgress))
+            @if (tasks != null)
             {
-                <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
-                    <div><strong>Title:</strong> @task.MSRtitle</div>
-                    <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
-                    <!-- Add more task details as needed -->
-                </div>
+                @foreach (var task in tasks.Where(t => t.Status == MSRTaskStatus.InProgress))
+                {
+                    <div class="task-item" @onclick="() => NavigateToTaskDetails(task.MsrID)">
+                        <div><strong>Title:</strong> @task.MSRtitle</div>
+                        <div><strong>Date Added:</strong> @task.DateAdded.ToString("MM/dd/yyyy")</div>
+                        <!-- Add more task details as needed -->
+                    </div>
+                }
+
             }
         </div>
     </div>
@@ -55,14 +67,49 @@
     </div>
 </div>
 
+    <!-- Add New Task Modal -->
+<div class="modal fade @(showAddNewTaskModal ? "show d-block" : "")" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">Add New Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAddNewTaskModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <AddTask />
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAddNewTaskModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @code {
-    private List<MSRTask> tasks;
+    private List<MSRTask> tasks = new List<MSRTask>();
+    private bool showAddNewTaskModal = false;
     private TaskColumns taskColumns;
+
+    private void OpenAddNewTaskModal()
+    {
+        showAddNewTaskModal = true;
+    }
+
+    private void CloseAddNewTaskModal()
+    {
+        showAddNewTaskModal = false;
+    }
 
     protected override async Task OnInitializedAsync()
     {
         var allTasks = await taskService.GetAllMSRTasksAsync();
-        taskColumns = new TaskColumns(allTasks);
+        if (allTasks != null)
+        {
+            tasks = allTasks;
+            taskColumns = new TaskColumns(allTasks);
+        }
     }
 
     private void NavigateToTaskDetails(int taskId)

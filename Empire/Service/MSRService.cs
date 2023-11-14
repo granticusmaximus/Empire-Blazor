@@ -40,10 +40,12 @@ namespace Empire.Service
         // Get all MSR Tasks
         public async Task<List<MSRTask>> GetAllMSRTasksAsync()
         {
-            return await _context.Tasks
-                .Include(t => t.AppUser) 
+            var tasks = await _context.Tasks
+                .Include(t => t.AppUser)
                 .Include(t => t.Apps)
                 .ToListAsync();
+
+            return tasks ?? new List<MSRTask>();
         }
 
         // Update an existing MSR Task
