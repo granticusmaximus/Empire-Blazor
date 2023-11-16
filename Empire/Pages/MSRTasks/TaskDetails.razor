@@ -8,7 +8,9 @@
 
 @if (msrTask == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
 }
 else
 {
@@ -32,6 +34,13 @@ else
         <dd class="col-sm-9">@msrTask.MSRNote</dd>
     </dl>
 
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            @errorMessage
+        </div>
+    }
+
     <button class="btn btn-primary" @onclick="EditTask">Edit</button>
     <button class="btn btn-secondary" @onclick="BackToList">Back to List</button>
 }
@@ -39,17 +48,31 @@ else
 @code {
     [Parameter]
     public int MsrID { get; set; }
-
+    private string errorMessage;
     private MSRTask msrTask;
 
     protected override async Task OnInitializedAsync()
     {
-        msrTask = await MSRTaskService.GetMSRTaskByIdAsync(MsrID);
+        try
+        {
+            msrTask = await MSRTaskService.GetMSRTaskByIdAsync(MsrID);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
     }
 
     private void EditTask()
     {
-        navi.NavigateTo($"/task/edit/{msrTask.MsrID}");
+        if (msrTask != null)
+        {
+            navi.NavigateTo($"/task/edit/{msrTask.MsrID}");
+        }
+        else
+        {
+            errorMessage = "Task details for editing are not available. Please try reloading the page or return to the task list.";
+        }
     }
 
     private void BackToList()

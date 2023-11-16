@@ -40,5 +40,8 @@ namespace Empire.Models
 
         [DisplayName("Status")]
         public MSRTaskStatus? Status { get; set; } = MSRTaskStatus.Backlog;
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }

@@ -2,7 +2,11 @@
 @using Empire.Data
 @using Empire.Models
 @using Empire.Service
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
 @inject MSRService TaskService
+@inject AppService AppService
 
 
 <EditForm Model="@msrTask" OnValidSubmit="@SaveTaskAsync">
@@ -65,22 +69,23 @@
     protected override async Task OnInitializedAsync()
     {
         msrTask = await TaskService.GetMSRTaskByIdAsync(MsrID);
+        users = await userManager.Users.ToListAsync();
+        apps = await AppService.GetAllAppsAsync();
     }
 
     private async Task SaveTaskAsync()
     {
-        if (msrTask != null)
+        try
         {
             bool result = await TaskService.UpdateMSRTaskAsync(msrTask);
             if (result)
             {
-                message = "Task created successfully!";
-                msrTask = new MSRTask();
+                message = "Task updated successfully!";
             }
-            else
-            {
-                message = "Error creating the task!";
-            }
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            message = "The task has been modified by another user. Please reload and try again.";
         }
     }
 }
