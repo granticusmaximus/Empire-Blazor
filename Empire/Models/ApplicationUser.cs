@@ -33,5 +33,6 @@ namespace Empire.Models
         public int? RoleId { get; set; }
         public Role? Role { get; set; }
         public ICollection<MSRTask> MSRTasks { get; set; }
+        public DateTime RegisterDate { get; set; } = DateTime.Now;
     }
 }

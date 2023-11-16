@@ -285,14 +285,13 @@ C:\Users\grantwatson\source\repos\Empire\Empire\obj\Debug\net6.0\refint\Empire.d
 C:\Users\grantwatson\source\repos\Empire\Empire\obj\Debug\net6.0\Empire.pdb
 C:\Users\grantwatson\source\repos\Empire\Empire\obj\Debug\net6.0\Empire.genruntimeconfig.cache
 C:\Users\grantwatson\source\repos\Empire\Empire\obj\Debug\net6.0\ref\Empire.dll
+Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.dll
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\appsettings.Development.json
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\appsettings.json
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.staticwebassets.runtime.json
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.exe
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.deps.json
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.runtimeconfig.json
-Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.dll
-Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Empire.pdb
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\Humanizer.dll
 Z:\Desktop\Development\CSharp\Empire\Empire\bin\Debug\net6.0\MailKit.dll
@@ -581,4 +580,3 @@ Z:\Desktop\Development\CSharp\Empire\Empire\obj\Debug\net6.0\Empire.dll
 Z:\Desktop\Development\CSharp\Empire\Empire\obj\Debug\net6.0\refint\Empire.dll
 Z:\Desktop\Development\CSharp\Empire\Empire\obj\Debug\net6.0\Empire.pdb
 Z:\Desktop\Development\CSharp\Empire\Empire\obj\Debug\net6.0\Empire.genruntimeconfig.cache
-Z:\Desktop\Development\CSharp\Empire\Empire\obj\Debug\net6.0\ref\Empire.dll

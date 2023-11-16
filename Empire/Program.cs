@@ -27,7 +27,7 @@ builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<MSRService>();
-builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+builder.Services.AddScoped<UserSession>();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));
 
