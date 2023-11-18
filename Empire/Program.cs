@@ -28,17 +28,14 @@ builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<MSRService>();
 builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));
-
-
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
-
 builder.Services.AddHttpClient("LocalApiClient", client =>
 {
     client.BaseAddress = new Uri(apiBaseAddress);
 });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -49,10 +46,7 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
-
 var app = builder.Build();
-
-
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -60,10 +54,8 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -72,5 +64,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();

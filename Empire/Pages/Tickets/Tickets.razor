@@ -1,49 +1,90 @@
 ﻿@page "/tickets"
-@using System.Xml.Linq
 @using Empire.Models
-@using System.IO
 @using System.Globalization
+@using Empire.Service
+@using Empire.Pages.Tickets
+@inject TicketService ticketService
 @inject NavigationManager navi
 @attribute [AllowAnonymous]
 
 <h2>Ticket List</h2>
+<div class="col-md-6">
+    <span>
+        <button @onclick="OpenAddNewTicketModal" class="btn btn-warning">New Task Button</button>
+    </span>
+</div>
+<hr/>
 <div class="btn-group flex-row justify-content-evenly">
     <button @onclick="(() => SortTickets(TicketField.TicketID))" class="btn btn-primary filter-button">Ticket ID</button>
     <button @onclick="(() => SortTickets(TicketField.Title))" class="btn btn-primary filter-button">Title</button>
     <button @onclick="(() => SortTickets(TicketField.Severity))" class="btn btn-primary filter-button">Severity</button>
     <button @onclick="(() => SortTickets(TicketField.DueDate))" class="btn btn-primary filter-button">Due Date</button>
 </div>
-
-<table class="table table-striped">
-    <thead class="thead-dark">
-        <tr class="text-center">
-            <th scope="col" class="col-1">Ticket ID</th>
-            <th scope="col">Title</th>
-            <th scope="col" class="col-2">Severity</th>
-            <th scope="col" class="col-1">Due Date</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var ticket in tickets)
-        {
-            <tr style="vertical-align: middle;">
-                <th scope="row">@ticket.TicketId</th>
-                <td>@ticket.Title</td>
-                <td class="@GetSeverityCssClass(ticket.Severity) text-uppercase text-white text-center" style="font-weight: 700">@ticket.Severity</td>
-                <td class="text-center">@ticket.DueDate.ToShortDateString()</td>
-                <td>
-                    <button class="btn btn-primary mb-0 mx-0" @onclick="(() => ViewTicketDetails(ticket.TicketId))">View Details</button>
-                </td>
+@if (tickets == null)
+{
+    <p>Loading tickets...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr class="text-center">
+                <th scope="col" class="col-1">Ticket ID</th>
+                <th scope="col">Title</th>
+                <th scope="col" class="col-2">Severity</th>
+                <th scope="col" class="col-1">Due Date</th>
+                <th scope="col"></th>
             </tr>
-        }
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                <tr style="vertical-align: middle;">
+                    <th scope="row">@ticket.TicketId</th>
+                    <td>@ticket.Title</td>
+                    <td class="@GetSeverityCssClass(ticket.Severity.ToString()) text-uppercase text-white text-center" style="font-weight: 700">@ticket.Severity</td>
+                    <td class="text-center">@ticket.DueDate.ToShortDateString()</td>
+                    <td>
+                        <button class="btn btn-primary mb-0 mx-0" @onclick="(() => ViewTicketDetails(ticket.TicketId))">View Details</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+    <!-- Add New Ticket Modal -->
+    <div class="modal fade @(showAddNewTicketModal ? "show d-block" : "")" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">Add New Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAddNewTicketModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <CreateTicket />
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAddNewTicketModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @code {
     private List<Ticket> tickets = new List<Ticket>();
     private TicketField sortedColumn = TicketField.TicketID; // Default sorting column
     private bool sortDescending = false; // Default sorting order (ascending)
+    private bool showAddNewTicketModal = false;
+    private void OpenAddNewTicketModal()
+    {
+        showAddNewTicketModal = true;
+    }
+
+    private void CloseAddNewTicketModal()
+    {
+        showAddNewTicketModal = false;
+    }
 
     public enum TicketField
     {
@@ -55,7 +96,7 @@
 
     protected override void OnInitialized()
     {
-        LoadTicketsFromXml();
+        LoadTickets();
     }
 
     private void SortTickets(TicketField column)
@@ -102,28 +143,13 @@
         }
     }
 
-    private void LoadTicketsFromXml()
+    private async Task LoadTickets()
     {
-        string xmlFilePath = "tickets.xml";
-
-        if (File.Exists(xmlFilePath))
-        {
-            XDocument xmlDoc = XDocument.Load(xmlFilePath);
-            tickets = xmlDoc.Root.Elements("Ticket")
-                .Select(x => new Ticket
-                    {
-                        TicketId = x.Element("ID").Value,
-                        Title = x.Element("Title").Value,
-                        Severity = x.Element("Severity").Value,
-                        DueDate = DateTime.ParseExact(
-                            x.Element("DueDate").Value,
-                            "dd-MM-yyyy",
-                            CultureInfo.InvariantCulture
-                        )
-                    })
-                .ToList();
-        }
+        tickets = await ticketService.GetAllTasksAsync();
+        SortTickets(sortedColumn);
+        StateHasChanged();
     }
+
 
     private void ViewTicketDetails(string ticketId)
     {

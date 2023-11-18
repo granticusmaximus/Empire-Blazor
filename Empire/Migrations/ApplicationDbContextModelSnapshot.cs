@@ -222,6 +222,39 @@ namespace Empire.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("Empire.Models.Ticket", b =>
+                {
+                    b.Property<string>("TicketId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TicketId");
+
+                    b.ToTable("Tickets");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

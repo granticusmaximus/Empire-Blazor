@@ -4,15 +4,15 @@
 
 namespace Empire.Migrations
 {
-    public partial class AddNulledAssignAppID : Migration
+    public partial class NewEntityMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "AssignedAppID",
-                table: "Tasks",
-                type: "int",
-                nullable: true,
+            migrationBuilder.AlterColumn<string>(
+                name: "Severity",
+                table: "Tickets",
+                type: "nvarchar(max)",
+                nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int");
         }
@@ -20,14 +20,12 @@ namespace Empire.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "AssignedAppID",
-                table: "Tasks",
+                name: "Severity",
+                table: "Tickets",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
         }
     }
 }

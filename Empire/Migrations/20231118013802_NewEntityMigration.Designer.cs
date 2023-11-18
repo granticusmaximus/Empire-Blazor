@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231111021330_AddNulledAssignAppID")]
-    partial class AddNulledAssignAppID
+    [Migration("20231118013802_NewEntityMigration")]
+    partial class NewEntityMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,6 +94,9 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
@@ -164,17 +167,15 @@ namespace Empire.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MsrID"), 1L, 1);
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AppsAppID")
+                    b.Property<int?>("AppsAppID")
                         .HasColumnType("int");
 
                     b.Property<int?>("AssignedAppID")
                         .HasColumnType("int");
 
                     b.Property<string>("AssignedUserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateAdded")
@@ -188,7 +189,13 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("MsrID");
@@ -215,6 +222,39 @@ namespace Empire.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Empire.Models.Ticket", b =>
+                {
+                    b.Property<string>("TicketId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Severity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeOfCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TicketId");
+
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -367,15 +407,11 @@ namespace Empire.Migrations
                 {
                     b.HasOne("Empire.Models.ApplicationUser", "AppUser")
                         .WithMany("MSRTasks")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("Empire.Models.AppList", "Apps")
                         .WithMany()
-                        .HasForeignKey("AppsAppID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppsAppID");
 
                     b.Navigation("AppUser");
 

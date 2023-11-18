@@ -11,9 +11,19 @@ namespace Empire.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Ticket>()
+                .Property(t => t.Severity)
+                .HasConversion<string>();
+        }
+
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<AppList> Apps { get; set; }
         public DbSet<MSRTask> Tasks { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
     }
 }
