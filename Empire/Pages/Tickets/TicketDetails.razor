@@ -10,7 +10,13 @@
 @attribute [AllowAnonymous]
 
 <h2>Ticket Details</h2>
-
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="Tickets">
+        <span aria-hidden="true">Back to Tickets</span>
+    </NavLink>
+</div>
+<hr />
 @if (_ticket != null)
 {
     <div class="card">
@@ -85,9 +91,9 @@ else if (!string.IsNullOrEmpty(message))
     private bool showTechNotesInput = false;
     private string newTechNotes = string.Empty;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        LoadTicketDetails();
+        await LoadTicketDetails();
     }
 
     private async Task DeleteTicket()
