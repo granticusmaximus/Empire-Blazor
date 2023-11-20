@@ -6,3 +6,13 @@
 }
 
 <component type="typeof(App)" render-mode="ServerPrerendered" />
+
+@* In your wwwroot/index.html or _Host.cshtml file *@
+<script>
+    Blazor.start({
+        configureSignalR: (builder) => {
+            builder.configureLogging(signalR.LogLevel.Trace);
+        }
+    });
+</script>
+

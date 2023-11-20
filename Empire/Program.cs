@@ -32,6 +32,12 @@ builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
+
+builder.Services.AddSignalR(e =>
+{
+    e.MaximumReceiveMessageSize = 90002400;
+});
+
 builder.Services.AddHttpClient("LocalApiClient", client =>
 {
     client.BaseAddress = new Uri(apiBaseAddress);

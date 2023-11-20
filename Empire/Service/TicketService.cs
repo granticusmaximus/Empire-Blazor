@@ -17,6 +17,11 @@ namespace Empire.Service
             _context = context;
         }
 
+        public async Task<List<AppList>> GetAllAppsAsync()
+        {
+            return await _context.Apps.ToListAsync();
+        }
+
         public async Task<List<Ticket>> GetAllTasksAsync()
         {
             return await _context.Tickets.ToListAsync();
