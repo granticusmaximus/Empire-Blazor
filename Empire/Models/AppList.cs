@@ -23,6 +23,5 @@ namespace Empire.Models
 
         [DisplayName("POC Email:")]
         public string POCEmail { get; set; }
-        public ICollection<Ticket>? Tickets { get; set; }
     }
 }

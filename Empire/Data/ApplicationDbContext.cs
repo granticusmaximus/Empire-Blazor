@@ -25,5 +25,6 @@ namespace Empire.Data
         public DbSet<MSRTask> Tasks { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
