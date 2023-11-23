@@ -30,11 +30,11 @@
         <p>@_ticket.Description</p>
         <p><strong>Client Email:</strong> @_ticket.ClientEmail</p>
         <p><strong>Client Phone Number:</strong> @_ticket.ClientPhoneNumber</p>
-            @if (_ticket != null && !string.IsNullOrEmpty(_ticket.TechNotes))
+            @if (_note != null && !string.IsNullOrEmpty(_note.Notes))
             {
                 <p><strong>Tech Notes:</strong></p>
                 <ul>
-                    @foreach (var note in _ticket.TechNotes.Split('\n'))
+                    @foreach (var note in _note.Notes.Split('\n'))
                     {
                         <li>@note</li>
                     }
@@ -43,25 +43,6 @@
     </div>
 </div>
 
-    <div class="d-flex justify-content-end">
-        <div class="mb-3 mt-2 d-flex justify-content-evenly">
-            <AuthorizeView Roles="Technician">
-                <Authorized>
-                    <button class="btn btn-primary mb-3 mx-2" @onclick="ToggleTechNotesInput">Add Tech Notes</button>
-                </Authorized>
-            </AuthorizeView>
-
-            <AuthorizeView Roles="Administrator">
-                <Authorized>
-                    <button class="btn btn-danger mb-3 mx-2" @onclick="DeleteTicket">Delete</button>
-                </Authorized>
-            </AuthorizeView>
-
-        </div>
-    </div>
-
-    @if (showTechNotesInput)
-    {
         <div class="card">
             <div class="card-body">
                 <h4>Add Tech Notes</h4>
@@ -73,7 +54,6 @@
                 </div>
             </div>
         </div>
-    }
 }
 else if (!string.IsNullOrEmpty(message))
 {
@@ -87,8 +67,8 @@ else if (!string.IsNullOrEmpty(message))
     public string TicketId { get; set; }
     private string message = "";
     private Ticket _ticket;
+    private TechNote _note;
     private bool isLoading = false;
-    private bool showTechNotesInput = false;
     private string newTechNotes = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -105,7 +85,7 @@ else if (!string.IsNullOrEmpty(message))
 
     private async Task LoadTicketDetails()
     {
-        _ticket = await ticketService.GetTaskByIdAsync(TicketId);
+        _ticket = await ticketService.GetTaskByIdAsync(TicketId, includeTechNotes: true);
 
         if (_ticket == null)
         {
@@ -113,32 +93,26 @@ else if (!string.IsNullOrEmpty(message))
         }
     }
 
-    private void ToggleTechNotesInput()
-    {
-        showTechNotesInput = !showTechNotesInput;
-    }
-
     private async Task SaveTechNotes()
     {
-        _ticket = await ticketService.GetTaskByIdAsync(TicketId);
-
-        if (_ticket != null)
+        if (!string.IsNullOrWhiteSpace(newTechNotes))
         {
-            // Check if _ticket.TechNotes is not null or empty and append a delimiter
-            // For example, using a newline character to separate notes
-            if (!string.IsNullOrEmpty(_ticket.TechNotes))
-            {
-                _ticket.TechNotes += "\n"; // Newline as a separator
-            }
+            // Create a new TechNote instance
+            var techNote = new TechNote { Notes = newTechNotes };
 
-            // Append the new tech note
-            _ticket.TechNotes += newTechNotes;
+            // Add the TechNote to the Ticket
+            await ticketService.AddTechNoteToTicketAsync(TicketId, techNote);
 
-            // Update the ticket using the service
-            await ticketService.UpdateTaskAsync(_ticket);
+            // Optionally, clear the textarea after saving
+            newTechNotes = string.Empty;
+
+            // Reload the ticket details to update the UI
+            await LoadTicketDetails();
         }
-
-        showTechNotesInput = false;
+        else
+        {
+            message = "There was an error with saving the note!";
+        }
     }
 
 

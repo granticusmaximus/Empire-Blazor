@@ -39,15 +39,6 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="app">Associated App:</label>
-        <InputSelect id="app" class="form-control" @bind-Value="_ticket.AppListId">
-            @foreach (var app in apps)
-            {
-                <option value="@app.AppID">@app.AppName</option>
-            }
-        </InputSelect>
-    </div>
     <div class="mb-3">
         <div class="form-group">
             <label for="description">Description:</label>
@@ -107,12 +98,6 @@
     private Ticket _ticket = new Ticket { DueDate = DateTime.Now.Date < new DateTime(2020, 1, 1) ? new DateTime(2020, 1, 1) : DateTime.Now.Date };
     private bool showWarning = false;
     private static readonly Random random = new Random();
-    private List<AppList> apps = new List<AppList>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        apps = await ticketService.GetAllAppsAsync();
-    }
 
     private async Task SaveTicket()
     {

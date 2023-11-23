@@ -16,7 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer((builder.Configuration.GetConnectionString("DefaultConnection"))));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
+    ServiceLifetime.Scoped);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole>()
@@ -25,9 +26,6 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<RoleService>();
-builder.Services.AddScoped<AppService>();
-builder.Services.AddScoped<MSRService>();
-builder.Services.AddScoped<UserSession>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));

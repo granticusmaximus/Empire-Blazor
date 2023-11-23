@@ -17,19 +17,21 @@ namespace Empire.Service
             _context = context;
         }
 
-        public async Task<List<AppList>> GetAllAppsAsync()
-        {
-            return await _context.Apps.ToListAsync();
-        }
-
         public async Task<List<Ticket>> GetAllTasksAsync()
         {
             return await _context.Tickets.ToListAsync();
         }
 
-        public async Task<Ticket> GetTaskByIdAsync(string ticketId)
+        public async Task<Ticket> GetTaskByIdAsync(string ticketId, bool includeTechNotes = false)
         {
-            return await _context.Tickets.FirstOrDefaultAsync(t => t.TicketId == ticketId);
+            IQueryable<Ticket> query = _context.Tickets;
+
+            if (includeTechNotes)
+            {
+                query = query.Include(t => t.Notes);
+            }
+
+            return await query.FirstOrDefaultAsync(t => t.TicketId == ticketId);
         }
 
         public async Task CreateNewTaskAsync(Ticket ticket)
@@ -51,6 +53,40 @@ namespace Empire.Service
             if (ticket != null)
             {
                 _context.Tickets.Remove(ticket);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task AddTechNoteToTicketAsync(string ticketId, TechNote techNote)
+        {
+            var ticket = await _context.Tickets.Include(t => t.Notes)
+                                               .FirstOrDefaultAsync(t => t.TicketId == ticketId);
+
+            if (ticket != null)
+            {
+                if (ticket.Notes == null)
+                {
+                    ticket.Notes = new List<TechNote>();
+                }
+
+                ticket.Notes.Add(techNote);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
+        public async Task UpdateTechNoteAsync(TechNote note)
+        {
+            _context.Notes.Update(note);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteTechNoteAsync(int noteID)
+        {
+            TechNote? techNote = await _context.Notes.FirstOrDefaultAsync(t => t.Id == noteID);
+            if (techNote != null)
+            {
+                _context.Notes.Remove(techNote);
                 await _context.SaveChangesAsync();
             }
         }
