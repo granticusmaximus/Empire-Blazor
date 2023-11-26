@@ -1,32 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "Z:\\Desktop\\Development\\CSharp\\Empire\\Empire\\Empire.csproj": {}
+    "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Empire.csproj": {}
   },
   "projects": {
-    "Z:\\Desktop\\Development\\CSharp\\Empire\\Empire\\Empire.csproj": {
+    "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Empire.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Z:\\Desktop\\Development\\CSharp\\Empire\\Empire\\Empire.csproj",
+        "projectUniqueName": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Empire.csproj",
         "projectName": "Empire",
-        "projectPath": "Z:\\Desktop\\Development\\CSharp\\Empire\\Empire\\Empire.csproj",
-        "packagesPath": "C:\\Users\\grantwatson\\.nuget\\packages\\",
-        "outputPath": "Z:\\Desktop\\Development\\CSharp\\Empire\\Empire\\obj\\",
+        "projectPath": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Empire.csproj",
+        "packagesPath": "/Users/grantwatson/.nuget/packages/",
+        "outputPath": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\grantwatson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/grantwatson/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,6 +33,9 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -101,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.100-preview.7.23376.3/RuntimeIdentifierGraph.json"
         }
       }
     }
