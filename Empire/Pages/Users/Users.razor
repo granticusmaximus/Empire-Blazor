@@ -36,8 +36,7 @@ else
                 <th>Full Name</th>
                 <th>Cell #</th>
                 <th>Address</th>
-                <th>City</th>
-                <th>Designation</th>
+            <th>City</th>
                 <th>Role</th>
                 <th>Actions</th>
             </tr>
@@ -51,7 +50,6 @@ else
                     <td>@user.Cellnumber</td>
                     <td>@user.Address</td>
                     <td>@user.City</td>
-                    <td>@user.Designation</td>
                     <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
                     <td>
                         <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>

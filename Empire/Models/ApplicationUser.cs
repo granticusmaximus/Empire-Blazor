@@ -29,7 +29,6 @@ namespace Empire.Models
 
         public string? Gender { get; set; }
         public string? City { get; set; }
-        public string? Designation { get; set; }
         public int? RoleId { get; set; }
         public Role? Role { get; set; }
         public DateTime RegisterDate { get; set; } = DateTime.Now;
