@@ -1,10 +1,6 @@
 ﻿using Empire.Data;
 using Empire.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Empire.Service
 {
