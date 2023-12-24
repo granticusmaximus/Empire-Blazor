@@ -1,6 +1,9 @@
 ﻿using Empire.Data;
 using Empire.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Empire.Service
 {
@@ -24,7 +27,8 @@ namespace Empire.Service
 
             if (includeTechNotes)
             {
-                query = query.Include(t => t.Notes);
+                query = query.Include(t => t.TicketTechNotes)
+                             .ThenInclude(ttn => ttn.TechNote);
             }
 
             return await query.FirstOrDefaultAsync(t => t.TicketId == ticketId);
@@ -32,7 +36,7 @@ namespace Empire.Service
 
         public async Task CreateNewTaskAsync(Ticket ticket)
         {
-            ticket.TimeOfCreation = DateTime.Now; // Set creation time
+            ticket.TimeOfCreation = DateTime.Now;
             await _context.Tickets.AddAsync(ticket);
             await _context.SaveChangesAsync();
         }
@@ -55,36 +59,39 @@ namespace Empire.Service
 
         public async Task AddTechNoteToTicketAsync(string ticketId, TechNote techNote)
         {
-            var ticket = await _context.Tickets.Include(t => t.Notes)
-                                               .FirstOrDefaultAsync(t => t.TicketId == ticketId);
-
-            if (ticket != null)
+            if (techNote.Id == 0)
             {
-                if (ticket.Notes == null)
-                {
-                    ticket.Notes = new List<TechNote>();
-                }
-
-                ticket.Notes.Add(techNote);
+                _context.Notes.Add(techNote);
                 await _context.SaveChangesAsync();
             }
-        }
 
+            var ticketTechNote = new TicketTechNote
+            {
+                TicketId = ticketId,
+                TechNoteId = techNote.Id
+            };
 
-        public async Task UpdateTechNoteAsync(TechNote note)
-        {
-            _context.Notes.Update(note);
+            _context.Add(ticketTechNote);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTechNoteAsync(int noteID)
+        public async Task DeleteTechNoteAsync(int techNoteId)
         {
-            TechNote? techNote = await _context.Notes.FirstOrDefaultAsync(t => t.Id == noteID);
+            // Remove relationships in the junction table
+            var ticketTechNotes = await _context.TicketTechNotes
+                .Where(ttn => ttn.TechNoteId == techNoteId)
+                .ToListAsync();
+
+            _context.TicketTechNotes.RemoveRange(ticketTechNotes);
+
+            // Remove the TechNote itself
+            var techNote = await _context.Notes.FindAsync(techNoteId);
             if (techNote != null)
             {
                 _context.Notes.Remove(techNote);
-                await _context.SaveChangesAsync();
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Empire.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialSetup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,19 +24,6 @@ namespace Empire.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Notes = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Notes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -47,24 +34,6 @@ namespace Empire.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tickets",
-                columns: table => new
-                {
-                    TicketId = table.Column<string>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Severity = table.Column<string>(type: "TEXT", nullable: false),
-                    ClientEmail = table.Column<string>(type: "TEXT", nullable: true),
-                    ClientPhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TimeOfCreation = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tickets", x => x.TicketId);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +67,7 @@ namespace Empire.Migrations
                     Address = table.Column<string>(type: "TEXT", nullable: true),
                     Cellnumber = table.Column<string>(type: "TEXT", nullable: true),
                     ProfilePicture = table.Column<byte[]>(type: "BLOB", nullable: true),
-                    Gender = table.Column<string>(type: "TEXT", nullable: true),
+                    Gender = table.Column<int>(type: "INTEGER", nullable: false),
                     City = table.Column<string>(type: "TEXT", nullable: true),
                     RoleId = table.Column<int>(type: "INTEGER", nullable: true),
                     RegisterDate = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -125,30 +94,6 @@ namespace Empire.Migrations
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TechNoteTicket",
-                columns: table => new
-                {
-                    NotesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TicketsTicketId = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TechNoteTicket", x => new { x.NotesId, x.TicketsTicketId });
-                    table.ForeignKey(
-                        name: "FK_TechNoteTicket_Notes_NotesId",
-                        column: x => x.NotesId,
-                        principalTable: "Notes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TechNoteTicket_Tickets_TicketsTicketId",
-                        column: x => x.TicketsTicketId,
-                        principalTable: "Tickets",
-                        principalColumn: "TicketId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -236,6 +181,44 @@ namespace Empire.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Notes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Notes = table.Column<string>(type: "TEXT", nullable: false),
+                    TicketId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    TicketId = table.Column<string>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Severity = table.Column<string>(type: "TEXT", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TimeOfCreation = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TechNoteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.TicketId);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Notes_Id",
+                        column: x => x.Id,
+                        principalTable: "Notes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -279,13 +262,30 @@ namespace Empire.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TechNoteTicket_TicketsTicketId",
-                table: "TechNoteTicket",
-                column: "TicketsTicketId");
+                name: "IX_Notes_TicketId",
+                table: "Notes",
+                column: "TicketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_Id",
+                table: "Tickets",
+                column: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Notes_Tickets_TicketId",
+                table: "Notes",
+                column: "TicketId",
+                principalTable: "Tickets",
+                principalColumn: "TicketId",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Notes_Tickets_TicketId",
+                table: "Notes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -302,22 +302,19 @@ namespace Empire.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "TechNoteTicket");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Notes");
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Notes");
         }
     }
 }

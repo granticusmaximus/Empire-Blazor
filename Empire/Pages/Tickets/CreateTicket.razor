@@ -50,24 +50,9 @@
     <div class="mb-3">
         <div class="row">
             <div class="form-group col-md-6">
-                <label for="clientEmail">Client Email:</label>
-                <InputText type="email" id="clientEmail" class="form-control" @bind-Value="_ticket.ClientEmail" />
-                <ValidationMessage For="@(() => _ticket.ClientEmail)" class="text-danger" />
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="clientPhoneNumber">Client Phone Number:</label>
-                <InputText id="clientPhoneNumber" class="form-control" @bind-Value="_ticket.ClientPhoneNumber" />
-                <ValidationMessage For="@(() => _ticket.ClientPhoneNumber)" class="text-danger" />
-            </div>
-        </div>
-    </div>
-
-    <div class="mb-3">
-        <div class="row">
-            <div class="form-group col-md-6">
                 <label for="severity">Severity:</label>
                 <InputSelect id="severity" class="form-control" @bind-Value="_ticket.Severity">
+                    <option value="">--Select Option--</option>
                     @foreach (var severity in Enum.GetValues<TicketSeverity>())
                     {
                         <option value="@severity">@severity</option>
@@ -102,8 +87,7 @@
     private async Task SaveTicket()
     {
         if (string.IsNullOrEmpty(_ticket.Title) || string.IsNullOrEmpty(_ticket.Description) ||
-            string.IsNullOrEmpty(_ticket.ClientEmail) || string.IsNullOrEmpty(_ticket.ClientPhoneNumber) ||
-            string.IsNullOrEmpty(_ticket.Severity.ToString()))
+        string.IsNullOrEmpty(_ticket.Severity.ToString()))
         {
             showWarning = true;
             return;

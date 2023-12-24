@@ -18,6 +18,12 @@
     .dropZone:hover {
             cursor: pointer;
     }
+
+    .image-preview {
+        border-radius: 50%;
+        width: 58%;
+        display: none;
+    }
 </style>
 
 <h1>@ViewData["Title"]</h1>
@@ -44,11 +50,15 @@
                 <br />
 
                 <div class="form-group dropZone" id="dragDropArea">
-                    <label asp-for="Input.UploadedProfilePicture">Drag & Drop your Profile Picture here or click to upload</label>
-                    <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control" style="display: none;" />
+                    <label for="Input.UploadedProfilePicture">Drag & Drop your Profile Picture here or click to
+                        upload</label>
+                    <input asp-for="Input.UploadedProfilePicture" type="file" class="form-control"
+                        style="display: none;" />
                     <div id="fileDragName" style="padding: 10px;"></div>
+                    <img id="imagePreview" class="image-preview" alt="Profile Picture Preview" />
                     <span asp-validation-for="Input.UploadedProfilePicture" class="text-danger"></span>
                 </div>
+
                 <br />
 
                 <div class="form-floating">

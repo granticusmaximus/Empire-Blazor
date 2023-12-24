@@ -34,6 +34,13 @@ namespace Empire.Service
         }
         #endregion
 
+        #region Get All App Users   
+        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        {
+            return await _appDBContext.ApplicationUser.ToListAsync();
+        }
+        #endregion
+
         #region Get App User by Id
         public async Task<ApplicationUser> GetUserAsync(string Id)
         {

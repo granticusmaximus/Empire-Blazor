@@ -41,6 +41,12 @@
         background-color: #0b5ed7 !important;
         border-color: #0a58ca !important;
     }
+
+    .image-preview {
+        border-radius: 50%;
+        width: 58%;
+        display: none;
+    }
 </style>
 
 <h1>@ViewData["Title"]</h1>
@@ -57,6 +63,7 @@
                     <div class="dropZone">
                         Drop or <button type="button">Browse for a new profile picture</button>
                         <input type="file" hidden accept="image/*" />
+                        <img id="imagePreview" class="image-preview" alt="Profile Picture Preview" />
                     </div>
                 </div>
                 <div class="form-floating">

@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets/favicon.ico"
     },
     {
+      "Id": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/wwwroot/js/emailjs-interop.js",
+      "PackagePath": "staticwebassets/js/emailjs-interop.js"
+    },
+    {
       "Id": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/wwwroot/js/registerDnD.js",
       "PackagePath": "staticwebassets/js/registerDnD.js"
     },

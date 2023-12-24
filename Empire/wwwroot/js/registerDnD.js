@@ -1,50 +1,64 @@
-﻿document.addEventListener("DOMContentLoaded", function() {
-    const dropZone = document.getElementById("dragDropArea");
-    const fileInput = dropZone.querySelector("input[type=file]");
-    const fileNameDisplay = document.getElementById("fileDragName");
+﻿document.addEventListener('DOMContentLoaded', function () {
+	const dropZone = document.getElementById('dragDropArea');
+	const fileInput = dropZone.querySelector('input[type=file]');
+	const fileNameDisplay = document.getElementById('fileDragName');
+	const imagePreview = document.getElementById('imagePreview');
 
-    dropZone.addEventListener("click", function() {
-        fileInput.click();
-    });
+	function updateImageDisplay() {
+		if (fileInput.files && fileInput.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				imagePreview.src = e.target.result;
+				imagePreview.style.display = 'block';
+			};
+			reader.readAsDataURL(fileInput.files[0]);
+		}
+	}
 
-    fileInput.addEventListener("change", function() {
-        if (fileInput.files.length) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-        }
-    });
+	dropZone.addEventListener('click', function () {
+		fileInput.click();
+	});
 
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-        dropZone.addEventListener(eventName, preventDefaults, false);
-    });
+	fileInput.addEventListener('change', function () {
+		if (fileInput.files.length) {
+			fileNameDisplay.textContent = fileInput.files[0].name;
+			updateImageDisplay();
+		}
+	});
 
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
+	['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+		dropZone.addEventListener(eventName, preventDefaults, false);
+	});
 
-    ["dragenter", "dragover"].forEach(eventName => {
-        dropZone.addEventListener(eventName, highlight, false);
-    });
+	function preventDefaults(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
 
-    ["dragleave", "drop"].forEach(eventName => {
-        dropZone.addEventListener(eventName, unhighlight, false);
-    });
+	['dragenter', 'dragover'].forEach((eventName) => {
+		dropZone.addEventListener(eventName, highlight, false);
+	});
 
-    function highlight() {
-        dropZone.classList.add("dragover-border");
-    }
+	['dragleave', 'drop'].forEach((eventName) => {
+		dropZone.addEventListener(eventName, unhighlight, false);
+	});
 
-    function unhighlight() {
-        dropZone.classList.remove("dragover-border");
-    }
+	function highlight() {
+		dropZone.classList.add('dragover-border');
+	}
 
-    dropZone.addEventListener("drop", handleDrop, false);
+	function unhighlight() {
+		dropZone.classList.remove('dragover-border');
+	}
 
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        fileInput.files = dt.files;
-        if (fileInput.files.length) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-        }
-    }
+	dropZone.addEventListener('drop', handleDrop, false);
+
+	function handleDrop(e) {
+		const dt = e.dataTransfer;
+		fileInput.files = dt.files;
+		if (fileInput.files.length) {
+			fileNameDisplay.textContent = fileInput.files[0].name;
+			updateImageDisplay();
+		}
+	}
 });

@@ -1,8 +1,4 @@
 ﻿@page "/tickets/details/{TicketId}/"
-@using System.Xml.Linq
-@using System.IO
-@using System.Globalization
-@using System.Collections.Generic
 @using Empire.Models
 @using Empire.Service
 @inject TicketService ticketService
@@ -21,67 +17,108 @@
 {
     <div class="card">
     <div class="card-body">
-        <p><strong>Ticket ID:</strong> @_ticket.TicketId</p>
-        <p><strong>Severity:</strong> <span class="@GetSeverityCssClass(_ticket.Severity.ToString())">@_ticket.Severity</span></p>
-        <p><strong>Due Date:</strong> @_ticket.DueDate.ToShortDateString()</p>
-        <p><strong>Time ticket was created:</strong> @_ticket.TimeOfCreation</p>
-
-        <p><strong>Description:</strong></p>
-        <p>@_ticket.Description</p>
-        <p><strong>Client Email:</strong> @_ticket.ClientEmail</p>
-        <p><strong>Client Phone Number:</strong> @_ticket.ClientPhoneNumber</p>
-            @if (_note != null && !string.IsNullOrEmpty(_note.Notes))
-            {
-                <p><strong>Tech Notes:</strong></p>
-                <ul>
-                    @foreach (var note in _note.Notes.Split('\n'))
-                    {
-                        <li>@note</li>
-                    }
-                </ul>
-            }
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Severity:</th>
+                    <th scope="col">Due Date:</th>
+                    <th scope="col">Time Created:</th>
+                    <th scope="col">Description:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">@_ticket.TicketId</th>
+                    <td class="@GetSeverityCssClass(_ticket.Severity.ToString()) text-uppercase text-white text-center"
+                        style="font-weight: 700">@_ticket.Severity</td>
+                    <td>@_ticket.DueDate.ToShortDateString()</td>
+                    <td>@_ticket.TimeOfCreation</td>
+                    <td>@_ticket.Description</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+    <hr />
 
-        <div class="card">
-            <div class="card-body">
-                <h4>Add Tech Notes</h4>
-                <div class="form-group">
-                    <textarea class="form-control" @bind="newTechNotes" rows="4"></textarea>
+    <div class="card">
+    <div class="card-body">
+        <p><strong>Ticket Comments:</strong></p>
+        @if (_ticket.TicketTechNotes != null && _ticket.TicketTechNotes.Any())
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Comments</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticketTechNote in _ticket.TicketTechNotes)
+                        {
+                            <tr>
+                                <td>@ticketTechNote.TechNote.Notes</td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger"
+                                        @onclick="@(() => DeleteTechNote(ticketTechNote.TechNote.Id))"><span class="oi oi-trash"
+                                            aria-hidden="true"></span></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No ticket notes available.</p>
+            }
+        </div>
+    </div>
+
+    <button class="btn btn-primary mt-3" @onclick="OpenModal">Add Comment</button>
+
+    <!-- Tech Note Modal -->
+    <div class="modal fade @(showModal ? "show d-block" : "d-none")" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Comment</h5>
+                    <button type="button" class="close" @onclick="CloseModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="d-flex justify-content-end mt-2">
-                    <button class="btn btn-primary" @onclick="SaveTechNotes">Save Tech Notes</button>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea class="form-control" @bind="newTechNotes" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveTechNotes">Save Comment</button>
                 </div>
             </div>
         </div>
+    </div>
 }
 else if (!string.IsNullOrEmpty(message))
 {
-    <div class="alert alert-info mt-3">
-        @message
-    </div>
+    <div class="alert alert-info mt-3">@message</div>
 }
+
 
 @code {
     [Parameter]
     public string TicketId { get; set; }
     private string message = "";
     private Ticket _ticket;
-    private TechNote _note;
-    private bool isLoading = false;
     private string newTechNotes = string.Empty;
+    private bool showModal = false;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadTicketDetails();
     }
-
-    private async Task DeleteTicket()
-    {
-        await ticketService.DeleteTaskAsync(TicketId);
-        navi.NavigateTo("/tickets");
-    }
-
 
     private async Task LoadTicketDetails()
     {
@@ -93,21 +130,25 @@ else if (!string.IsNullOrEmpty(message))
         }
     }
 
+    private void OpenModal()
+    {
+        showModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+    }
+
     private async Task SaveTechNotes()
     {
         if (!string.IsNullOrWhiteSpace(newTechNotes))
         {
-            // Create a new TechNote instance
             var techNote = new TechNote { Notes = newTechNotes };
-
-            // Add the TechNote to the Ticket
             await ticketService.AddTechNoteToTicketAsync(TicketId, techNote);
-
-            // Optionally, clear the textarea after saving
             newTechNotes = string.Empty;
-
-            // Reload the ticket details to update the UI
             await LoadTicketDetails();
+            CloseModal();
         }
         else
         {
@@ -115,19 +156,24 @@ else if (!string.IsNullOrEmpty(message))
         }
     }
 
-
     private string GetSeverityCssClass(string severity)
     {
         switch (severity.ToLower())
         {
             case "low":
-                return "text-success";
+                return "bg-success"; // Green
             case "medium":
-                return "text-warning";
+                return "bg-warning"; // Orange
             case "high":
-                return "text-danger";
+                return "bg-danger"; // Red
             default:
                 return "";
         }
+    }
+
+    private async Task DeleteTechNote(int techNoteId)
+    {
+        await ticketService.DeleteTechNoteAsync(techNoteId);
+        await LoadTicketDetails();
     }
 }

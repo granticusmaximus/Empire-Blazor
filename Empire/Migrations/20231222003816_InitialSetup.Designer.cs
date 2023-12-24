@@ -3,6 +3,7 @@ using System;
 using Empire.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222003816_InitialSetup")]
+    partial class InitialSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.21");
@@ -137,7 +139,13 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TicketId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
 
                     b.ToTable("Notes");
                 });
@@ -153,9 +161,15 @@ namespace Empire.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Severity")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("TechNoteId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("TimeOfCreation")
                         .HasColumnType("TEXT");
@@ -166,22 +180,9 @@ namespace Empire.Migrations
 
                     b.HasKey("TicketId");
 
+                    b.HasIndex("Id");
+
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("Empire.Models.TicketTechNote", b =>
-                {
-                    b.Property<string>("TicketId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TechNoteId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("TicketId", "TechNoteId");
-
-                    b.HasIndex("TechNoteId");
-
-                    b.ToTable("TicketTechNotes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -325,23 +326,26 @@ namespace Empire.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Empire.Models.TicketTechNote", b =>
+            modelBuilder.Entity("Empire.Models.TechNote", b =>
                 {
-                    b.HasOne("Empire.Models.TechNote", "TechNote")
-                        .WithMany("TicketTechNotes")
-                        .HasForeignKey("TechNoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Empire.Models.Ticket", "Ticket")
-                        .WithMany("TicketTechNotes")
+                        .WithMany("Notes")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TechNote");
-
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("Empire.Models.Ticket", b =>
+                {
+                    b.HasOne("Empire.Models.TechNote", "Note")
+                        .WithMany("Tickets")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Note");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -397,12 +401,12 @@ namespace Empire.Migrations
 
             modelBuilder.Entity("Empire.Models.TechNote", b =>
                 {
-                    b.Navigation("TicketTechNotes");
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Empire.Models.Ticket", b =>
                 {
-                    b.Navigation("TicketTechNotes");
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

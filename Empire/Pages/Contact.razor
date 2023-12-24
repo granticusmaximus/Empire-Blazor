@@ -1,0 +1,73 @@
+@inject IJSRuntime JSRuntime
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script src="~/emailjs-interop.js"></script>
+@page "/contact"
+
+<h2>Contact Us</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="@alertClass mt-3">@message</div>
+}
+
+<EditForm Model="@ContactFormModel" OnValidSubmit="HandleValidSubmit">
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="ContactFormModel.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <InputText id="Email" class="form-control" @bind-Value="ContactFormModel.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="Message">Message</label>
+        <InputTextArea id="Message" class="form-control" @bind-Value="ContactFormModel.Message" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send</button>
+</EditForm>
+
+@code {
+    public class ContactForm
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Message { get; set; }
+    }
+
+    private ContactForm ContactFormModel = new ContactForm();
+    private string message;
+    private string alertClass;
+
+    private async Task HandleValidSubmit()
+    {
+        var templateParams = new
+        {
+            from_name = ContactFormModel.Name,
+            from_email = ContactFormModel.Email,
+            message_html = ContactFormModel.Message
+        };
+
+        var success = await JSRuntime.InvokeAsync<bool>(
+        "sendEmail",
+        "grant@gwsapp.net",
+        "service_6a0eicb",
+        "template_u0zrcxp",
+        templateParams
+        );
+
+        if (success)
+        {
+            message = "Your message has been sent successfully!";
+            alertClass = "alert alert-info";
+            ContactFormModel = new ContactForm();
+        }
+        else
+        {
+            message = "There was an error sending your message. Please try again.";
+            alertClass = "alert alert-danger";
+        }
+    }
+}
