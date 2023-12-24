@@ -20,14 +20,32 @@
         /* Adjust as needed to give enough space */
     }
 </style>
+
+<style>
+    .action-buttons button {
+        padding: 0.2rem 0.4rem;
+        /* Reduces padding */
+        margin-right: 0.2rem;
+        /* Reduces space between buttons */
+        vertical-align: middle;
+        /* Aligns buttons vertically */
+    }
+
+    .action-col {
+        width: 15%;
+        /* Adjust as needed to give enough space */
+    }
+</style>
 <hr />
 <div class="col-md-6">
     <button @onclick="OpenAddNewTicketModal" class="btn btn-warning">Create New Task</button>
 </div>
 <hr />
 <div class="btn-group flex-row justify-content-evenly">
-    <button @onclick="() => SortTickets(TicketField.Severity)" class="btn btn-primary filter-button">Severity</button>
-    <button @onclick="() => SortTickets(TicketField.DueDate)" class="btn btn-primary filter-button">Due Date</button>
+    <button @onclick="(() => SortTickets(TicketField.TicketID))" class="btn btn-primary filter-button">Ticket ID</button>
+    <button @onclick="(() => SortTickets(TicketField.Title))" class="btn btn-primary filter-button">Title</button>
+    <button @onclick="(() => SortTickets(TicketField.Severity))" class="btn btn-primary filter-button">Severity</button>
+    <button @onclick="(() => SortTickets(TicketField.DueDate))" class="btn btn-primary filter-button">Due Date</button>
 </div>
 @if (tickets == null)
 {

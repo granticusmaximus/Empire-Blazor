@@ -1,4 +1,5 @@
 @inject IJSRuntime JSRuntime
+<<<<<<< HEAD
 @page "/contact"
 
 @if (isLoading)
@@ -17,6 +18,20 @@
 <div class="container">
     <h3>Contact Me</h3>
     <EditForm Model="@ContactFormModel" id="contact" OnValidSubmit="HandleValidSubmit">
+=======
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script src="~/emailjs-interop.js"></script>
+@page "/contact"
+
+<h2>Contact Us</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="@alertClass mt-3">@message</div>
+}
+
+<EditForm Model="@ContactFormModel" OnValidSubmit="HandleValidSubmit">
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
     <div class="form-group">
         <label for="Name">Name</label>
         <InputText id="Name" class="form-control" @bind-Value="ContactFormModel.Name" />
@@ -31,10 +46,17 @@
         <label for="Message">Message</label>
         <InputTextArea id="Message" class="form-control" @bind-Value="ContactFormModel.Message" />
     </div>
+<<<<<<< HEAD
         <hr />
         <button type="submit" class="btn btn-primary" id="contact-submit" disabled="@isLoading">Send</button>
 </EditForm>
 </div>
+=======
+
+    <button type="submit" class="btn btn-primary">Send</button>
+</EditForm>
+
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
 @code {
     public class ContactForm
     {
@@ -44,6 +66,7 @@
     }
 
     private ContactForm ContactFormModel = new ContactForm();
+<<<<<<< HEAD
     private string alertMessage;
     private string alertClass;
     private bool isLoading;
@@ -51,32 +74,57 @@
     private async Task HandleValidSubmit()
     {
         isLoading = true;
+=======
+    private string message;
+    private string alertClass;
+
+    private async Task HandleValidSubmit()
+    {
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
         var templateParams = new
         {
             from_name = ContactFormModel.Name,
             from_email = ContactFormModel.Email,
+<<<<<<< HEAD
             messageBody = ContactFormModel.Message
+=======
+            message_html = ContactFormModel.Message
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
         };
 
         var success = await JSRuntime.InvokeAsync<bool>(
         "sendEmail",
+<<<<<<< HEAD
         "p1-ZC3zRXrBzFjxma",
+=======
+        "grant@gwsapp.net",
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
         "service_6a0eicb",
         "template_u0zrcxp",
         templateParams
         );
 
+<<<<<<< HEAD
         isLoading = false;
 
         if (success)
         {
             alertMessage = "Your message has been sent successfully!";
+=======
+        if (success)
+        {
+            message = "Your message has been sent successfully!";
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
             alertClass = "alert alert-info";
             ContactFormModel = new ContactForm();
         }
         else
         {
+<<<<<<< HEAD
             alertMessage = "There was an error sending your message. Please try again.";
+=======
+            message = "There was an error sending your message. Please try again.";
+>>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
             alertClass = "alert alert-danger";
         }
     }
