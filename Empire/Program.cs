@@ -21,7 +21,6 @@ builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
-builder.Services.AddSingleton<IEmailService>(new SendGridEmailService("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"));
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
 
 builder.Services.AddSignalR(e =>

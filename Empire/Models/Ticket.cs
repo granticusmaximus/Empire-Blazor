@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Empire.Models
 {
@@ -11,11 +12,11 @@ namespace Empire.Models
         public string? Description { get; set; }
         [Required]
         public TicketSeverity Severity { get; set; }
-        public string? ClientEmail { get; set; }
-        public string? ClientPhoneNumber { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime TimeOfCreation { get; set; }
-        public ICollection<TechNote> Notes { get; set; }
+
+        public virtual ICollection<TicketTechNote> TicketTechNotes { get; set; }
+
     }
 
     public enum TicketSeverity
@@ -24,4 +25,5 @@ namespace Empire.Models
         Medium,
         High
     }
+
 }

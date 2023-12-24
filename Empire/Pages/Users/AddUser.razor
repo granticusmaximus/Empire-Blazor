@@ -8,7 +8,6 @@
 @inject ApplicationDbContext context
 @inject UserManager<ApplicationUser> userManager
 @inject NavigationManager NavigationManager
-@inject IEmailService emailService
 
 <h3>Add User</h3>
 <hr />
@@ -32,6 +31,7 @@
         <div class="form-group">
             <label for="RoleId" class="control-label">Role</label>
             <InputSelect id="RoleId" class="form-control" @bind-Value="@obj.RoleId">
+                <option value="">--Select Option--</option>
                 @foreach (var role in roles)
                 {
                     <option value="@role.Id">@role.Name</option>
@@ -51,7 +51,13 @@
         </div>
         <div class="form-group">
             <label for="Gender" class="control-label">Gender</label>
-            <InputText id="Gender" class="form-control" @bind-Value="@obj.Gender" />
+            <InputSelect id="Gender" class="form-control" @bind-Value="@obj.Gender">
+                <option value="">--Select Option--</option>
+                @foreach (var gender in Enum.GetValues<Gender>())
+                {
+                    <option value="@gender">@gender</option>
+                }
+            </InputSelect>
             <ValidationMessage For="@(() => obj.Gender)" />
         </div>
         <div class="form-group">
@@ -96,7 +102,6 @@
             {
                 var code = await userManager.GeneratePasswordResetTokenAsync(obj);
                 var callbackUrl = NavigationManager.ToAbsoluteUri($"/SetPassword?userId={obj.Id}&code={code}");
-                await emailService.SendEmailAsync(obj.Email, "Set Your Password", $"Please set your password by <a href='{callbackUrl}'>clicking here</a>.");
 
                 message = "User created successfully";
                 NavigationManager.NavigateTo("Users");

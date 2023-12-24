@@ -1,0 +1,83 @@
+@inject IJSRuntime JSRuntime
+@page "/contact"
+
+@if (isLoading)
+{
+    <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only"></span>
+    </div>
+</div>
+}
+
+@if (!string.IsNullOrEmpty(alertMessage))
+{
+    <div class="@alertClass mt-3">@alertMessage</div>
+}
+<div class="container">
+    <h3>Contact Me</h3>
+    <EditForm Model="@ContactFormModel" id="contact" OnValidSubmit="HandleValidSubmit">
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <InputText id="Name" class="form-control" @bind-Value="ContactFormModel.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <InputText id="Email" class="form-control" @bind-Value="ContactFormModel.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="Message">Message</label>
+        <InputTextArea id="Message" class="form-control" @bind-Value="ContactFormModel.Message" />
+    </div>
+        <hr />
+        <button type="submit" class="btn btn-primary" id="contact-submit" disabled="@isLoading">Send</button>
+</EditForm>
+</div>
+@code {
+    public class ContactForm
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Message { get; set; }
+    }
+
+    private ContactForm ContactFormModel = new ContactForm();
+    private string alertMessage;
+    private string alertClass;
+    private bool isLoading;
+
+    private async Task HandleValidSubmit()
+    {
+        isLoading = true;
+        var templateParams = new
+        {
+            from_name = ContactFormModel.Name,
+            from_email = ContactFormModel.Email,
+            messageBody = ContactFormModel.Message
+        };
+
+        var success = await JSRuntime.InvokeAsync<bool>(
+        "sendEmail",
+        "p1-ZC3zRXrBzFjxma",
+        "service_6a0eicb",
+        "template_u0zrcxp",
+        templateParams
+        );
+
+        isLoading = false;
+
+        if (success)
+        {
+            alertMessage = "Your message has been sent successfully!";
+            alertClass = "alert alert-info";
+            ContactFormModel = new ContactForm();
+        }
+        else
+        {
+            alertMessage = "There was an error sending your message. Please try again.";
+            alertClass = "alert alert-danger";
+        }
+    }
+}

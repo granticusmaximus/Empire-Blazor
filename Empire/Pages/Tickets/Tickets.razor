@@ -1,24 +1,33 @@
 ﻿@page "/tickets"
 @using Empire.Models
-@using System.Globalization
 @using Empire.Service
-@using Empire.Pages.Tickets
 @inject TicketService ticketService
 @inject NavigationManager navi
 @attribute [AllowAnonymous]
 
-<h2>Ticket List</h2>
+<style>
+    .action-buttons button {
+        padding: 0.2rem 0.4rem;
+        /* Reduces padding */
+        margin-right: 0.2rem;
+        /* Reduces space between buttons */
+        vertical-align: middle;
+        /* Aligns buttons vertically */
+    }
+
+    .action-col {
+        width: 15%;
+        /* Adjust as needed to give enough space */
+    }
+</style>
+<hr />
 <div class="col-md-6">
-    <span>
-        <button @onclick="OpenAddNewTicketModal" class="btn btn-warning">New Task Button</button>
-    </span>
+    <button @onclick="OpenAddNewTicketModal" class="btn btn-warning">Create New Task</button>
 </div>
-<hr/>
+<hr />
 <div class="btn-group flex-row justify-content-evenly">
-    <button @onclick="(() => SortTickets(TicketField.TicketID))" class="btn btn-primary filter-button">Ticket ID</button>
-    <button @onclick="(() => SortTickets(TicketField.Title))" class="btn btn-primary filter-button">Title</button>
-    <button @onclick="(() => SortTickets(TicketField.Severity))" class="btn btn-primary filter-button">Severity</button>
-    <button @onclick="(() => SortTickets(TicketField.DueDate))" class="btn btn-primary filter-button">Due Date</button>
+    <button @onclick="() => SortTickets(TicketField.Severity)" class="btn btn-primary filter-button">Severity</button>
+    <button @onclick="() => SortTickets(TicketField.DueDate)" class="btn btn-primary filter-button">Due Date</button>
 </div>
 @if (tickets == null)
 {
@@ -27,55 +36,64 @@
 else
 {
     <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr class="text-center">
-                <th scope="col" class="col-1">Ticket ID</th>
-                <th scope="col">Title</th>
-                <th scope="col" class="col-2">Severity</th>
-                <th scope="col" class="col-1">Due Date</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in tickets)
+    <thead class="thead-dark">
+        <tr class="text-center">
+            <th scope="col">Title</th>
+            <th scope="col" class="col-2">Severity</th>
+            <th scope="col" class="col-1">Due Date</th>
+            <th scope="col" class="action-col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in tickets)
             {
                 <tr style="vertical-align: middle;">
-                    <th scope="row">@ticket.TicketId</th>
                     <td>@ticket.Title</td>
-                    <td class="@GetSeverityCssClass(ticket.Severity.ToString()) text-uppercase text-white text-center" style="font-weight: 700">@ticket.Severity</td>
+                    <td class="@GetSeverityCssClass(ticket.Severity.ToString()) text-uppercase text-white text-center"
+                        style="font-weight: 700">@ticket.Severity</td>
                     <td class="text-center">@ticket.DueDate.ToShortDateString()</td>
                     <td>
-                        <button class="btn btn-primary mb-0 mx-0" @onclick="(() => ViewTicketDetails(ticket.TicketId))">View Details</button>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary mb-0" @onclick="() => ViewTicketDetails(ticket.TicketId)">
+                                <span class="oi oi-eye" aria-hidden="true"></span>
+                            </button>
+                            <button class="btn btn-danger mb-0" @onclick="() => DeleteTicket(ticket.TicketId)">
+                                <span class="oi oi-trash" aria-hidden="true"></span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-    <!-- Add New Ticket Modal -->
-    <div class="modal fade @(showAddNewTicketModal ? "show d-block" : "")" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
+<!-- Add New Ticket Modal -->
+<div class="modal fade @(showAddNewTicketModal ? "show d-block" : "")" id="addTaskModal" tabindex="-1" role="dialog"
+    aria-labelledby="addTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h5 class="modal-title" id="addTaskModalLabel">Add New Ticket</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CloseAddNewTicketModal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <CreateTicket />
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CloseAddNewTicketModal">Close</button>
-                </div>
+                <button type="button" class="close" @onclick="CloseAddNewTicketModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <CreateTicket />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseAddNewTicketModal">Close</button>
             </div>
         </div>
     </div>
+</div>
+
 @code {
     private List<Ticket> tickets = new List<Ticket>();
     private TicketField sortedColumn = TicketField.TicketID;
     private bool sortDescending = false;
     private bool showAddNewTicketModal = false;
+
     private void OpenAddNewTicketModal()
     {
         showAddNewTicketModal = true;
@@ -99,6 +117,12 @@ else
         await LoadTickets();
     }
 
+    private async Task LoadTickets()
+    {
+        tickets = await ticketService.GetAllTasksAsync();
+        SortTickets(sortedColumn);
+    }
+
     private void SortTickets(TicketField column)
     {
         if (column == sortedColumn)
@@ -110,6 +134,7 @@ else
             sortedColumn = column;
             sortDescending = false;
         }
+
         tickets = SortTicketsList(tickets, sortedColumn, sortDescending);
     }
 
@@ -120,11 +145,13 @@ else
             case TicketField.Title:
                 return descending ? ticketList.OrderByDescending(t => t.Title).ToList() : ticketList.OrderBy(t => t.Title).ToList();
             case TicketField.Severity:
-                return descending ? ticketList.OrderByDescending(t => t.Severity).ToList() : ticketList.OrderBy(t => t.Severity).ToList();
+                return descending ? ticketList.OrderByDescending(t => t.Severity).ToList() : ticketList.OrderBy(t =>
+                t.Severity).ToList();
             case TicketField.DueDate:
                 return descending ? ticketList.OrderByDescending(t => t.DueDate).ToList() : ticketList.OrderBy(t => t.DueDate).ToList();
             default:
-                return descending ? ticketList.OrderByDescending(t => t.TicketId).ToList() : ticketList.OrderBy(t => t.TicketId).ToList();
+                return descending ? ticketList.OrderByDescending(t => t.TicketId).ToList() : ticketList.OrderBy(t =>
+                t.TicketId).ToList();
         }
     }
 
@@ -143,18 +170,13 @@ else
         }
     }
 
-    private async Task LoadTickets()
+    private async Task DeleteTicket(string ticketId)
     {
-        try
+        var confirmed = true; // Implement confirmation logic if needed
+        if (confirmed)
         {
-            tickets = await ticketService.GetAllTasksAsync();
-            SortTickets(sortedColumn);
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading tickets: {ex.Message}");
-            // Handle the exception appropriately
+            await ticketService.DeleteTaskAsync(ticketId);
+            await LoadTickets(); // Reload tickets to update the list
         }
     }
 

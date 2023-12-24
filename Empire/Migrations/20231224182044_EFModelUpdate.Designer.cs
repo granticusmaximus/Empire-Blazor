@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231221195920_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231224182044_EFModelUpdate")]
+    partial class EFModelUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,8 +51,8 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Gender")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -149,12 +149,6 @@ namespace Empire.Migrations
                     b.Property<string>("TicketId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ClientEmail")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ClientPhoneNumber")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
@@ -175,6 +169,21 @@ namespace Empire.Migrations
                     b.HasKey("TicketId");
 
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Empire.Models.TicketTechNote", b =>
+                {
+                    b.Property<string>("TicketId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TechNoteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TicketId", "TechNoteId");
+
+                    b.HasIndex("TechNoteId");
+
+                    b.ToTable("TicketTechNotes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -309,21 +318,6 @@ namespace Empire.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TechNoteTicket", b =>
-                {
-                    b.Property<int>("NotesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("TicketsTicketId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("NotesId", "TicketsTicketId");
-
-                    b.HasIndex("TicketsTicketId");
-
-                    b.ToTable("TechNoteTicket");
-                });
-
             modelBuilder.Entity("Empire.Models.ApplicationUser", b =>
                 {
                     b.HasOne("Empire.Models.Role", "Role")
@@ -331,6 +325,25 @@ namespace Empire.Migrations
                         .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Empire.Models.TicketTechNote", b =>
+                {
+                    b.HasOne("Empire.Models.TechNote", "TechNote")
+                        .WithMany("TicketTechNotes")
+                        .HasForeignKey("TechNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empire.Models.Ticket", "Ticket")
+                        .WithMany("TicketTechNotes")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TechNote");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -384,19 +397,14 @@ namespace Empire.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TechNoteTicket", b =>
+            modelBuilder.Entity("Empire.Models.TechNote", b =>
                 {
-                    b.HasOne("Empire.Models.TechNote", null)
-                        .WithMany()
-                        .HasForeignKey("NotesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("TicketTechNotes");
+                });
 
-                    b.HasOne("Empire.Models.Ticket", null)
-                        .WithMany()
-                        .HasForeignKey("TicketsTicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("Empire.Models.Ticket", b =>
+                {
+                    b.Navigation("TicketTechNotes");
                 });
 #pragma warning restore 612, 618
         }

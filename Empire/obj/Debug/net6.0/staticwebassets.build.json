@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FcrmQvI25cpiRjiOBqUHu4GOiq9kFbQcDfX6rCBz1PI=",
+  "Hash": "G+ujEa9WmxCFvex/W3TTimUBylRKYh4RlZXQx+saKOY=",
   "Source": "Empire",
   "BasePath": "_content/Empire",
   "Mode": "Default",
@@ -1440,6 +1440,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/favicon.ico"
+    },
+    {
+      "Identity": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/wwwroot/js/emailjs-interop.js",
+      "SourceId": "Empire",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/wwwroot/",
+      "BasePath": "_content/Empire",
+      "RelativePath": "js/emailjs-interop.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/js/emailjs-interop.js"
     },
     {
       "Identity": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/wwwroot/js/registerDnD.js",
