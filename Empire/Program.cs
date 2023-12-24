@@ -22,11 +22,9 @@ builder.Services.AddScoped<ApplicationUserService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
-<<<<<<< HEAD
-=======
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
->>>>>>> 816666bd8a9a1c5616a8e5b1dc8e0a577b5e6083
+
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
 
 builder.Services.AddSignalR(e =>
