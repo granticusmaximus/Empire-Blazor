@@ -1,6 +1,9 @@
 ##Apps built into this suite (planned apps)
 
+- 
 - An agile work board for tasks (in progress)-(currently engaged)
+  - [X] Adding Comments
+  - [ ] Adding username to comments per task
 - Simple Document Entry Form (CRUD) (backlog)
 - Client Management System (backlog)
 - Invoice Creation (backlog)
