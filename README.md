@@ -1,4 +1,4 @@
-##Apps built into this suite (planned apps)
+##Apps built into this suite (planned apps)##
 
 - An agile work board for tasks (in progress)-(currently engaged)
   - [X] Adding Comments
