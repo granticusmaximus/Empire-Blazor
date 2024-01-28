@@ -3,6 +3,7 @@ using System;
 using Empire.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Empire.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240128224348_AddingAbilityToReplyToComments")]
+    partial class AddingAbilityToReplyToComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.21");
@@ -214,11 +216,16 @@ namespace Empire.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCommentId");
 
                     b.ToTable("Notes");
                 });
@@ -428,6 +435,15 @@ namespace Empire.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Empire.Models.TechNote", b =>
+                {
+                    b.HasOne("Empire.Models.TechNote", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId");
+
+                    b.Navigation("ParentComment");
+                });
+
             modelBuilder.Entity("Empire.Models.TicketTechNote", b =>
                 {
                     b.HasOne("Empire.Models.TechNote", "TechNote")
@@ -500,6 +516,8 @@ namespace Empire.Migrations
 
             modelBuilder.Entity("Empire.Models.TechNote", b =>
                 {
+                    b.Navigation("Replies");
+
                     b.Navigation("TicketTechNotes");
                 });
 
