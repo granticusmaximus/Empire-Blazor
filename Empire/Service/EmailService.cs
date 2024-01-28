@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
-using Empire.Models;
 public interface IEmailService
 {
     Task SendEmailAsync(string to, string subject, string body);

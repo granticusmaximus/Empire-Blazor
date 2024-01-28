@@ -46,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGlja2V0cy9DcmVhdGVUaWNrZXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Pages/Tickets/EditTicket.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGlja2V0cy9FZGl0VGlja2V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Pages/Tickets/TicketDetails.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvVGlja2V0cy9UaWNrZXREZXRhaWxzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

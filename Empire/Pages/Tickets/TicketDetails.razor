@@ -11,6 +11,13 @@
     <NavLink class="btn btn-success" href="Tickets">
         <span aria-hidden="true">Back to Tickets</span>
     </NavLink>
+    @if (!string.IsNullOrEmpty(TicketId))
+    {
+        var editTicketUrl = $"tickets/edit/{TicketId}";
+        <NavLink class="btn btn-primary ml-2" href="@editTicketUrl">
+            <span aria-hidden="true">Edit Ticket</span>
+        </NavLink>
+    }
 </div>
 <hr />
 @if (_ticket != null)

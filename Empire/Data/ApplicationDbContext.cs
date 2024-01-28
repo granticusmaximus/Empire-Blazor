@@ -37,5 +37,10 @@ namespace Empire.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketTechNote> TicketTechNotes { get; set; }
+        public DbSet<LUT_UserRoles> LUT_UserRoles { get; set; }
+        public DbSet<Expenses> Expenses { get; set; } = default!;
+        public DbSet<ExpenseNote> ExpenseNotes { get; set; } = default!;
+        public DbSet<Fund> Funds { get; set; } = default!;
+
     }
 }

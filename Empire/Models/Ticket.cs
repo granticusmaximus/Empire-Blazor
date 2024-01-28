@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Empire.Models
 {
@@ -14,6 +13,8 @@ namespace Empire.Models
         public TicketSeverity Severity { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime TimeOfCreation { get; set; }
+
+        public bool isComplete { get; set; }
 
         public virtual ICollection<TicketTechNote> TicketTechNotes { get; set; }
 

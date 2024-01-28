@@ -1,9 +1,6 @@
 ﻿using Empire.Data;
 using Empire.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Empire.Service
 {
@@ -43,8 +40,16 @@ namespace Empire.Service
 
         public async Task UpdateTaskAsync(Ticket ticket)
         {
-            _context.Tickets.Update(ticket);
-            await _context.SaveChangesAsync();
+            var existingTicket = await _context.Tickets.FindAsync(ticket.TicketId);
+            if (existingTicket != null)
+            {
+                existingTicket.isComplete = ticket.isComplete;
+                existingTicket.Title = ticket.Title;
+                existingTicket.Description = ticket.Description;
+                existingTicket.Severity = ticket.Severity;
+                existingTicket.DueDate = ticket.DueDate;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteTaskAsync(string ticketId)

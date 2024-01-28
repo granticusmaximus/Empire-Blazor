@@ -1,0 +1,111 @@
+@page "/tickets/edit/{TicketId}/"
+@using Empire.Models
+@using Empire.Service
+@using System.Xml.Linq
+@using System.Text
+@inject TicketService ticketService
+@inject NavigationManager navi
+
+<h3>Edit Ticket</h3>
+<hr />
+<div class="col-md-6">
+    <NavLink class="btn btn-success" href="Tickets">
+        <span aria-hidden="true">Back to Tickets</span>
+    </NavLink>
+</div>
+<hr />
+<EditForm Model="ticket" OnValidSubmit="UpdateTicket">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label for="Title">Title</label>
+        @if (ticket != null)
+        {
+            <InputText id="Title" @bind-Value="ticket.Title" class="form-control" />
+            <ValidationMessage For="@(() => ticket.Title)" />
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="DueDate">Due Date</label>
+        @if (ticket != null)
+        {
+            <InputDate id="DueDate" @bind-Value="ticket.DueDate" class="form-control" />
+            <ValidationMessage For="@(() => ticket.DueDate)" />
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        @if (ticket != null)
+        {
+            <InputText id="Description" @bind-Value="ticket.Description" class="form-control" />
+            <ValidationMessage For="@(() => ticket.Description)" />
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="Severity">Severity</label>
+        @if (ticket != null)
+        {
+            <InputSelect id="severity" class="form-control" @bind-Value="ticket.Severity">
+                <option value="">--Select Option--</option>
+                @foreach (var severity in Enum.GetValues<TicketSeverity>())
+                {
+                    <option value="@severity">@severity</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => ticket.Severity)" />
+        }
+    </div>
+
+    <!-- Add the checkbox for isComplete -->
+    <div class="form-group">
+        <label for="IsComplete">Is Complete</label>
+        <input type="checkbox" id="IsComplete" @bind="ticket.isComplete" />
+    </div>
+
+    <hr />
+    <button type="submit" class="btn btn-primary">Save</button>
+
+    @if (showWarning)
+    {
+        <div class="mb-3">
+            <div class="alert alert-warning mb-3" role="alert">
+                Please fill in all the required fields.
+            </div>
+        </div>
+    }
+    </EditForm>
+
+    @code {
+    private Ticket? ticket;
+    private bool showWarning = false;
+
+    [Parameter]
+    public string? TicketId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (TicketId != null)
+        {
+            ticket = await ticketService.GetTaskByIdAsync(TicketId);
+        }
+    }
+
+    private async Task UpdateTicket()
+    {
+        // Update the ticket in your data source (e.g., database)
+        if (string.IsNullOrEmpty(ticket?.Title) || string.IsNullOrEmpty(ticket.Description) ||
+        string.IsNullOrEmpty(ticket.Severity.ToString()))
+        {
+            showWarning = true;
+            return;
+        }
+        if (ticket != null)
+        {
+            await ticketService.UpdateTaskAsync(ticket);
+            navi.NavigateTo("/tickets");
+        }
+    }
+}

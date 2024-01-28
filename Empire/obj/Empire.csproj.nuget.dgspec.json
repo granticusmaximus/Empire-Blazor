@@ -77,6 +77,10 @@
             "SendGrid": {
               "target": "Package",
               "version": "[9.28.1, )"
+            },
+            "Syncfusion.Blazor": {
+              "target": "Package",
+              "version": "[24.1.41, )"
             }
           },
           "imports": [

@@ -10,18 +10,21 @@
 @inject NavigationManager navi
 
 <hr />
-<div class="col-md-6">
-    <NavLink class="btn btn-success" href="AddUser">
-        <span aria-hidden="true">Add User</span>
-    </NavLink>
-    <span>
-        <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
-    </span>
-    <span>
-        <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
-    </span>
-</div>
+<center>
+    <div class="col-md-6">
+        <span>
+            <button @onclick="OpenAddUserModal" class="btn btn-success">Add New User</button>
+        </span>
+        <span>
+            <button @onclick="OpenRoleListModal" class="btn btn-warning">Show Current Roles</button>
+        </span>
+        <span>
+            <button @onclick="OpenNewRoleModal" class="btn btn-info">Add New Role</button>
+        </span>
+    </div>
+</center>
 
+<hr />
 @if (users == null)
 {
     <p>Loading...</p>
@@ -51,13 +54,38 @@ else
                     <td>@user.City</td>
                     <td>@(user.Role != null ? user.Role.Name : "N/A")</td>
                     <td>
-                        <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2">Edit</button>
-                        <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm">Delete</button>
+                        <button @onclick="() => EditUser(user)" class="btn btn-success btn-sm mr-2"><span class="oi oi-pencil"
+                                aria-hidden="true"></span> Edit</button>
+                        <button @onclick="() => DeleteUser(user)" class="btn btn-danger btn-sm"><span class="oi oi-trash"
+                                aria-hidden="true"></span> Delete</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <!-- Add User Modal -->
+    <div class="modal fade @(showAddUserModal ? "show d-block" : "")" id="listRoleModal" tabindex="-1" role="dialog"
+        aria-labelledby="listRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="listRoleModalLabel">List of Roles</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        @onclick="CloseAddUserModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <AddUser />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        @onclick="CloseAddUserModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Role List Modal -->
     <div class="modal fade @(showRoleListModal ? "show d-block" : "")" id="listRoleModal" tabindex="-1" role="dialog" aria-labelledby="listRoleModalLabel" aria-hidden="true">
@@ -104,9 +132,22 @@ else
 
 @code {
     private List<ApplicationUser> users;
+    private bool showAddUserModal = false;
     private bool showAddRoleModal = false;
     private bool showRoleListModal = false;
     private bool IsAdmin { get; set; }
+    private bool IsManager { get; set; }
+    private bool IsUser { get; set; }
+
+    private void OpenAddUserModal()
+    {
+        showAddUserModal = true;
+    }
+
+    private void CloseAddUserModal()
+    {
+        showAddUserModal = false;
+    }
 
     private void OpenRoleListModal()
     {
@@ -130,22 +171,24 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await CheckIfUserIsAdmin();
+        await CheckUserRole();
         users = await userManager.Users.Include(u => u.Role).ToListAsync();
     }
 
-    private void EditUser(ApplicationUser user)
-    {
-        navi.NavigateTo($"/EditUser/{user.Id}");
-    }
-
-    private async Task CheckIfUserIsAdmin()
+    private async Task CheckUserRole()
     {
         var currentUser = await userManager.GetUserAsync(signInManager.Context.User);
         if (currentUser != null && currentUser.Role != null)
         {
             IsAdmin = currentUser.Role.Name == "Admin";
+            IsManager = currentUser.Role.Name == "Manager";
+            IsUser = currentUser.Role.Name == "User";
         }
+    }
+
+    private void EditUser(ApplicationUser user)
+    {
+        navi.NavigateTo($"/EditUser/{user.Id}");
     }
 
     private async Task DeleteUser(ApplicationUser user)

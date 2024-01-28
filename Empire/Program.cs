@@ -3,7 +3,8 @@ using Empire.Models;
 using Empire.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static EmailService;
+using Syncfusion.Blazor;
+using Syncfusion.Blazor.Popups;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,9 @@ builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpClient();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
-
+builder.Services.AddSyncfusionBlazor();
+builder.Services.AddScoped<ServiceInterface, ServiceImplementation>();
+builder.Services.AddScoped<SfDialogService>();
 var apiBaseAddress = builder.Configuration["ApiSettings:BaseAddress"];
 
 builder.Services.AddSignalR(e =>

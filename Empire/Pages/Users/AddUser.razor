@@ -70,7 +70,8 @@
             <InputText id="Email" class="form-control" @bind-Value="@obj.Email" />
             <ValidationMessage For="@(() => obj.Email)" />
         </div>
-
+        <br />
+        <br />
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>
             <button class="btn btn-danger" @onclick="Cancel">Cancel</button>
