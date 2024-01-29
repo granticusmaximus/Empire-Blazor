@@ -5,14 +5,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Blazor;
 using Syncfusion.Blazor.Popups;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")),
+    options.UseSqlite(connectionString),
     ServiceLifetime.Scoped);
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole>()
@@ -39,6 +41,7 @@ builder.Services.AddHttpClient("LocalApiClient", client =>
 {
     client.BaseAddress = new Uri(apiBaseAddress);
 });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -49,7 +52,12 @@ builder.Services.AddCors(options =>
                    .AllowAnyMethod();
         });
 });
+
 var app = builder.Build();
+
+// Explicitly set the environment to "Production"
+app.Environment.EnvironmentName = "Production";
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -59,6 +67,7 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
