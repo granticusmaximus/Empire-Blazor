@@ -46,7 +46,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-      
+
+      - name: Set ASPNETCORE_ENVIRONMENT
+        run: |
+          echo "Setting ASPNETCORE_ENVIRONMENT to Production"
+          echo "ASPNETCORE_ENVIRONMENT=Production" >> $GITHUB_ENV
+          
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
