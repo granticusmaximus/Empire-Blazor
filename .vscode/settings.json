@@ -1,5 +1,14 @@
 {
     "cSpell.words": [
         "ASPNETCORE"
-    ]
+    ],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "EmpireDbConnection",
+            "database": "${workspaceFolder:Empire}/Empire/EmpireDb.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }
