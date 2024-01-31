@@ -198,3 +198,40 @@ fieldset {
 :-ms-input-placeholder {
     color: #888;
 }
+.logindiv {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    margin-left: 10px;
+}
+
+/* Adjust the off-canvas menu width and other styles as needed */
+.offcanvas {
+    width: 250px;
+    /* Adjust the width as desired */
+}
+
+/* Center the off-canvas header text */
+.offcanvas-title {
+    text-align: center;
+}
+
+/* Add any other custom styles for your menu items */
+.nav-item {
+    padding: 10px 0;
+}
+
+/* Customize the close button (if needed) */
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

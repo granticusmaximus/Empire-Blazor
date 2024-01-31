@@ -1,67 +1,58 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
+﻿@page "/"
+
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Empire.Models
 @using Empire.Service
+@using Microsoft.AspNetCore.Components.Web
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Empire</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="navbarOffcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Empire</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="about">
+                    <span class="oi oi-compass" aria-hidden="true"></span> About
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="contact">
+                    <span class="oi oi-envelope-open" aria-hidden="true"></span> Contact
+                </NavLink>
+            </div>
+            @if (IsAuthenticated)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Users">
+                        <span class="oi oi-person" aria-hidden="true"></span> Users
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Tickets">
+                        <span class="oi oi-laptop" aria-hidden="true"></span> Project Tasks
+                    </NavLink>
+                </div>
+            }
+        </nav>
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="about">
-                <span class="oi oi-compass" aria-hidden="true"></span> About
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="contact">
-                <span class="oi oi-envelope-open" aria-hidden="true"></span> Contact
-            </NavLink>
-        </div>
-        @if (IsAuthenticated)
-        {
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Users">
-                    <span class="oi oi-person" aria-hidden="true"></span> Users
-                </NavLink>
-            </div>
-
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Tickets">
-                    <span class="oi oi-laptop" aria-hidden="true"></span> Project Tasks
-                </NavLink>
-            </div>
-
-            @* <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Tasks">
-                    <span class="oi oi-pencil" aria-hidden="true"></span> Tasks
-                </NavLink>
-            </div> *@
-        }
-    </nav>
-</div>
+<button title="Navigation menu" class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas">
+    <span class="navbar-toggler-icon"></span>
+</button>
 
 @code {
-    private bool collapseNavMenu = true;
     private bool IsAuthenticated { get; set; }
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,5 +63,13 @@
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         IsAuthenticated = authState.User.Identity.IsAuthenticated;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeBootstrap");
+        }
     }
 }

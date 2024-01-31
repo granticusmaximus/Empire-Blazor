@@ -1,32 +1,41 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using Empire.Models;
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> UserManager
 
-<AuthorizeView>
-    <Authorized Context="authState">
-        @if (CurrentUser != null)
-        {
-            <a href="Identity/Account/Manage" style="color:white">
-                <img src="data:image/jpeg;base64,@Convert.ToBase64String(CurrentUser.ProfilePicture)" width="30" height="30" alt="Profile Picture" class="rounded-circle" />
-                @CurrentUser.FirstName <span class="oi oi-cog" aria-hidden="true"></span>
-            </a>
-        }
-        else
-        {
-            <span>Loading...</span>
-        }
-        <br />
-        &nbsp;
-        <form method="post" action="Identity/Account/LogOut" class="d-inline">
-            <button type="submit" class="nav-link btn btn-danger" style="color: white">Log out</button>
-        </form>
-    </Authorized>
-    <NotAuthorized>
-        <a href="Identity/Account/Register" style="color:white">Register</a>
-        <a href="Identity/Account/Login" style="color:white">Log in</a>
-    </NotAuthorized>
-</AuthorizeView>
+<div class="logindiv">
+    <AuthorizeView>
+        <Authorized Context="authState">
+            <div class="user-info">
+                @if (CurrentUser != null)
+                {
+                    <a href="Identity/Account/Manage" style="color:white">
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(CurrentUser.ProfilePicture)" width="30"
+                            height="30" alt="Profile Picture" class="rounded-circle" />
+                        @CurrentUser.FirstName
+                    </a>
+                }
+                else
+                {
+                    <span>Loading...</span>
+                }
+            </div>
+            <div class="logout-button">
+                <form method="post" action="Identity/Account/LogOut" class="d-inline">
+                    <button type="submit" class="nav-link btn btn-danger" style="color: white">Log out</button>
+                </form>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <center>
+                <a href="Identity/Account/Register" style="color:white">Register</a>
+                <a href="Identity/Account/Login" style="color:white">Log in</a>
+            </center>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
 
 @code {
     private ApplicationUser CurrentUser { get; set; }

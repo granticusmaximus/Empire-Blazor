@@ -887,3 +887,8 @@ Z:/Desktop/Development/CSharp/Empire/Empire/obj/Debug/net6.0/ref/Empire.dll
 /Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/obj/Debug/net6.0/Empire.pdb
 /Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/obj/Debug/net6.0/Empire.genruntimeconfig.cache
 /Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/obj/Debug/net6.0/ref/Empire.dll
+/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/bin/Debug/net6.0/publish/web.config
+/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/bin/Debug/net6.0/publish/appsettings.Development.json
+/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/bin/Debug/net6.0/publish/appsettings.json
+/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/bin/Debug/net6.0/publish/Empire.deps.json
+/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/bin/Debug/net6.0/publish/Empire.runtimeconfig.json
