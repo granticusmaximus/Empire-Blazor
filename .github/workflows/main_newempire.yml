@@ -26,13 +26,7 @@ jobs:
         run: dotnet build Empire/Empire.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish Empire/Empire.csproj -c Release -o ${{env.DOTNET_ROOT}}/Empire
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/Empire
+        run: dotnet publish Empire/Empire.csproj -c Release -o ${{ env.DOTNET_ROOT }}/Empire
 
   deploy:
     runs-on: windows-latest
