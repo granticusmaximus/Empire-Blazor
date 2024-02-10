@@ -3,6 +3,7 @@
 @using Empire.Service
 @using System.Xml.Linq
 @using System.Text
+@using TinyMCE.Blazor
 @inject TicketService ticketService
 @inject NavigationManager navi
 
@@ -39,7 +40,7 @@
         <label for="Description">Description</label>
         @if (ticket != null)
         {
-            <InputText id="Description" @bind-Value="ticket.Description" class="form-control" />
+            <Editor id="Description" @bind-Value="ticket.Description" class="form-control" />
             <ValidationMessage For="@(() => ticket.Description)" />
         }
     </div>

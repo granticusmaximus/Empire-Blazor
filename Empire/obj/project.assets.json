@@ -4414,6 +4414,24 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "TinyMCE.Blazor/1.0.4": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.Web": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/TinyMCE.Blazor.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/TinyMCE.Blazor.dll": {}
+        },
+        "build": {
+          "buildTransitive/TinyMCE.Blazor.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/TinyMCE.Blazor.props": {}
+        }
       }
     }
   },
@@ -12299,6 +12317,27 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
+    },
+    "TinyMCE.Blazor/1.0.4": {
+      "sha512": "s0YDK+snuE5h2iVS/JujgCSUIM0Pp/1ZOHzTY7Z7LRMO+5U7ajXDpOylUAEqgn2ZlGOajKue5u4yw/Ym1WnFPw==",
+      "type": "package",
+      "path": "tinymce.blazor/1.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "build/TinyMCE.Blazor.props",
+        "buildMultiTargeting/TinyMCE.Blazor.props",
+        "buildTransitive/TinyMCE.Blazor.props",
+        "lib/net5.0/TinyMCE.Blazor.dll",
+        "lib/net6.0/TinyMCE.Blazor.dll",
+        "staticwebassets/TinyMce.Blazor.lib.module.js",
+        "staticwebassets/tinymce-blazor.js",
+        "tiny-icon.png",
+        "tinymce.blazor.1.0.4.nupkg.sha512",
+        "tinymce.blazor.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -12312,7 +12351,8 @@
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.21",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.16",
       "SendGrid >= 9.28.1",
-      "Syncfusion.Blazor >= 24.1.41"
+      "Syncfusion.Blazor >= 24.1.41",
+      "TinyMCE.Blazor >= 1.0.4"
     ]
   },
   "packageFolders": {
@@ -12395,6 +12435,10 @@
           "Syncfusion.Blazor": {
             "target": "Package",
             "version": "[24.1.41, )"
+          },
+          "TinyMCE.Blazor": {
+            "target": "Package",
+            "version": "[1.0.4, )"
           }
         },
         "imports": [

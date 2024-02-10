@@ -17,7 +17,8 @@
           "Microsoft.EntityFrameworkCore.Tools": "6.0.21",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.16",
           "SendGrid": "9.28.1",
-          "Syncfusion.Blazor": "24.1.41"
+          "Syncfusion.Blazor": "24.1.41",
+          "TinyMCE.Blazor": "1.0.4"
         },
         "runtime": {
           "Empire.dll": {}
@@ -2972,6 +2973,17 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
+      },
+      "TinyMCE.Blazor/1.0.4": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components.Web": "6.0.5"
+        },
+        "runtime": {
+          "lib/net6.0/TinyMCE.Blazor.dll": {
+            "assemblyVersion": "1.0.4.0",
+            "fileVersion": "1.0.4.0"
+          }
+        }
       }
     }
   },
@@ -4758,6 +4770,13 @@
       "sha512": "sha512-5zJ0XDxAIg8iy+t4aMnQAu0MqVbqyvfoUVl1yDV61xdo3Vth45oA2FoY4pPkxYAH5f8ixpmTqXeEIya95x0aCQ==",
       "path": "system.xml.xdocument/4.3.0",
       "hashPath": "system.xml.xdocument.4.3.0.nupkg.sha512"
+    },
+    "TinyMCE.Blazor/1.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s0YDK+snuE5h2iVS/JujgCSUIM0Pp/1ZOHzTY7Z7LRMO+5U7ajXDpOylUAEqgn2ZlGOajKue5u4yw/Ym1WnFPw==",
+      "path": "tinymce.blazor/1.0.4",
+      "hashPath": "tinymce.blazor.1.0.4.nupkg.sha512"
     }
   }
 }

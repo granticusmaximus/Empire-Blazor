@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tmiYz+ZiiYpctz80uDefUAgvdWjL3XcAV+nLTCXyi/jf/C4GDmHO7stCTh3idxp7LHf4y4a0LA51uBz6shTX3g==",
+  "dgSpecHash": "uvPNBvsLAEqTekdQPwOK10iYX6XIjoAyxFEOXZq4yjIxR/fAcuHNoX/Wln/VcfR4X+zCGpquRLp2jLbFTojwnA==",
   "success": true,
   "projectFilePath": "/Users/grantwatson/Desktop/Development/CSharp/Empire/Empire/Empire.csproj",
   "expectedPackageFiles": [
@@ -257,7 +257,8 @@
     "/Users/grantwatson/.nuget/packages/system.threading.timer/4.3.0/system.threading.timer.4.3.0.nupkg.sha512",
     "/Users/grantwatson/.nuget/packages/system.windows.extensions/6.0.0/system.windows.extensions.6.0.0.nupkg.sha512",
     "/Users/grantwatson/.nuget/packages/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
-    "/Users/grantwatson/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512"
+    "/Users/grantwatson/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
+    "/Users/grantwatson/.nuget/packages/tinymce.blazor/1.0.4/tinymce.blazor.1.0.4.nupkg.sha512"
   ],
   "logs": []
 }

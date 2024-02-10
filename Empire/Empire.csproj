@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="SendGrid" Version="9.28.1" />
     <PackageReference Include="Syncfusion.Blazor" Version="24.1.41" />
+    <PackageReference Include="TinyMCE.Blazor" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>

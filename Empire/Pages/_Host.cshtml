@@ -8,7 +8,8 @@
 <component type="typeof(App)" render-mode="ServerPrerendered" />
 <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 <script src="~/js/emailjs-interop.js"></script>
-@* In your wwwroot/index.html or _Host.cshtml file *@
+<script src="_framework/blazor.server.js"></script>
+<script src="_content/TinyMCE.Blazor/tinymce-blazor.js"></script>
 <script>
     Blazor.start({
         configureSignalR: (builder) => {

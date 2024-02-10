@@ -3,6 +3,7 @@
 @using Empire.Service
 @using System.Xml.Linq
 @using System.Text
+@using TinyMCE.Blazor
 @inject TicketService ticketService
 @inject NavigationManager navi
 
@@ -42,7 +43,7 @@
     <div class="mb-3">
         <div class="form-group">
             <label for="description">Description:</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="_ticket.Description" />
+            <Editor id="description" class="form-control" @bind-Value="_ticket.Description" />
             <ValidationMessage For="@(() => _ticket.Description)" class="text-danger" />
         </div>
     </div>

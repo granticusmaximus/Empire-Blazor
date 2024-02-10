@@ -81,6 +81,10 @@
             "Syncfusion.Blazor": {
               "target": "Package",
               "version": "[24.1.41, )"
+            },
+            "TinyMCE.Blazor": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             }
           },
           "imports": [
